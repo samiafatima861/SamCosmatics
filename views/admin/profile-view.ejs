@@ -1,0 +1,90 @@
+<!-- <!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Admin Profile</title>
+  <link rel="stylesheet" href="/css/products.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+      <a class="logo" href="/">SamCosmetics</a>
+      <!-- <div>
+        <a href="/admin">Dashboard</a>
+        <form action="/admin/logout" method="post" style="display:inline"><button class="btn" style="margin-left:.5rem">Logout</button></form>
+      </div> -->
+      <!-- <div style="display:flex;align-items:center;gap:.75rem">
+        <a href="/admin/profile" style="display:flex;align-items:center;gap:.5rem;text-decoration:none;color:inherit">
+        <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="profile" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid #ddd"/>
+        <span><%= admin?.name %></span>
+        </a>
+        <form action="/admin/logout" method="post" style="display:inline"><button class="btn" style="margin-left:.5rem">Logout</button></form>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="max-width:600px;margin:2rem auto">
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
+      <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="admin" style="width:80px;height:80px;border-radius:50%;object-fit:cover"/>
+      <div>
+        <h1 style="margin:0"><%= admin?.name %></h1>
+        <p style="margin:0;color:#666"><%= admin?.email %></p>
+      </div>
+    </div>
+
+    <dl style="display:grid;grid-template-columns:120px 1fr;gap:.5rem 1rem">
+      <dt><strong>Phone</strong></dt><dd><%= admin?.phone || '—' %></dd>
+      <dt><strong>Address</strong></dt><dd><%= admin?.address || '—' %></dd>
+    </dl>
+
+    <div style="margin-top:1.5rem">
+      <a href="/admin/profile/edit" class="btn" style="background:#d63384;color:#fff;padding:.6rem 1rem;border:none;border-radius:6px;text-decoration:none">Edit profile</a>
+    </div>
+  </main>
+</body>
+</html> --> 
+
+
+
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'Profile', pageCss: 'admin' }) %>
+</head>
+<body>
+  <header class="site-header admin-header">
+    <div class="container admin-header-inner">
+      <a class="logo" href="/">SamCosmetics</a>
+      <div class="admin-nav">
+        <a href="/admin/profile" class="admin-profile-link">
+          <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="profile" class="admin-avatar-sm"/>
+          <span><%= admin?.name %></span>
+        </a>
+        <form action="/admin/logout" method="post" style="display:inline">
+          <button class="btn btn-dark btn-logout">Logout</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main admin-main--narrow">
+    <div class="profile-header">
+      <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="admin" class="admin-avatar-lg"/>
+      <div>
+        <h1><%= admin?.name %></h1>
+        <p><%= admin?.email %></p>
+      </div>
+    </div>
+
+    <dl class="profile-details">
+      <dt><strong>Phone</strong></dt><dd><%= admin?.phone || '—' %></dd>
+      <dt><strong>Address</strong></dt><dd><%= admin?.address || '—' %></dd>
+    </dl>
+
+    <div class="dashboard-section--tight">
+      <a href="/admin/profile/edit" class="btn btn-pink">Edit profile</a>
+    </div>
+  </main>
+</body>
+</html>

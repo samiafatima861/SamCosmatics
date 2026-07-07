@@ -1,0 +1,45 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title><%= title %></title>
+<link rel="stylesheet" href="/css/products.css">
+<link rel="stylesheet" href="/css/wishlist.css">
+</head><body>
+<header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
+<main class="container">
+  <h1>Your Wishlist</h1>
+  <% if (!products || products.length === 0) { %>
+    <p class="wishlist-empty">Your wishlist is empty.</p>
+  <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(p => { %>
+        <div class="card" data-id="<%= p.id %>">
+          <img src="<%= p.image_url || '/images/placeholder.png' %>" alt="<%= p.name %>"/>
+          <div class="card-body">
+            <h3><%= p.name %></h3>
+            <p class="short"><%= p.short_description %></p>
+            <div class="meta">
+              <span class="price">$<%= Number(p.price).toFixed(2) %></span>
+              <button class="move">Add to Cart</button>
+              <button class="remove">Remove</button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</main>
+<script src="/js/product-actions.js"></script>
+<script>
+document.addEventListener('click', async (e)=>{
+  const card = e.target.closest('.card'); if (!card) return;
+  const id = card.dataset.id;
+  if (e.target.matches('.move')) {
+    await fetch('/api/wishlist/'+id+'/move-to-cart',{method:'POST'});
+    location.reload();
+  }
+  if (e.target.matches('.remove')) {
+    await fetch('/api/products/'+id+'/wishlist',{method:'POST'});
+    location.reload();
+  }
+});
+</script>
+</body></html>

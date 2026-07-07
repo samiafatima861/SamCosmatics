@@ -1,0 +1,366 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin-layout.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin" class="admin-sidebar-brand">SamCosmetics</a>
+      <nav>
+        <a href="/admin" class="admin-nav-link active">
+          <span class="admin-nav-icon">🏠</span> Dashboard
+        </a>
+        <a href="/admin/adminProducts" class="admin-nav-link">
+          <span class="admin-nav-icon">🛍️</span> Products
+        </a>
+        <a href="/admin/profile" class="admin-nav-link">
+          <span class="admin-nav-icon">👤</span> Profile
+        </a>
+
+        <a href="/admin/inventory" class="admin-nav-link">
+          <span class="admin-nav-icon">📊</span> Stock Inventory
+       </a>
+
+       <a href="/admin/sellers" class="admin-nav-link">
+          <span class="admin-nav-icon">🏪</span> Sellers
+       </a>
+      
+       <a href="/admin/customers" class="admin-nav-link">
+          <span class="admin-nav-icon">🧑‍🤝‍🧑</span> Customers
+      </a>
+
+      <a href="/admin/notifications" class="admin-nav-link">
+        <span class="admin-nav-icon">🔔</span> Notifications
+     </a>
+
+     <a href="/admin/revenue" class="admin-nav-link">
+      <span class="admin-nav-icon">💰</span> Revenue
+     </a>
+
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <div>
+      <header class="admin-topbar">
+        <h2>Dashboard</h2>
+        <div class="admin-topbar-account">
+           <a href="/admin/notifications" class="notif-bell">
+              🔔
+             <% if (stats.notifications > 0) { %>
+              <span class="notif-badge"><%= stats.notifications %></span>
+             <% } %>
+           </a>
+
+          <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="admin" class="admin-topbar-avatar"/>
+          <span class="admin-topbar-name"><%= admin?.name %></span>
+          <form action="/admin/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+
+      </header>
+
+      <main class="admin-content">
+        <h1>Welcome, <%= admin?.name %></h1>
+
+            <div class="stat-grid">
+              <a href="/admin/adminProducts" class="stat-card pink stat-card-link">
+                <div class="stat-card-icon">🛍️</div>
+                <div class="stat-card-value"><%= stats.products %></div>
+                <div class="stat-card-label">Products</div>
+              </a>
+
+              <a href="/admin/orders" class="stat-card blue stat-card-link">
+                <div class="stat-card-icon">📦</div>
+                <div class="stat-card-value"><%= stats.orders %></div>
+                <div class="stat-card-label">Orders</div>
+             </a>
+
+            <a href="/admin/revenue" class="stat-card orange stat-card-link">
+              <div class="stat-card-icon">💰</div>
+              <div class="stat-card-value">$<%= stats.revenue.toFixed(2) %></div>
+              <div class="stat-card-label">Total Revenue</div>
+            </a>
+
+           <a href="/admin/customers" class="stat-card blue stat-card-link">
+              <div class="stat-card-icon">🧑‍🤝‍🧑</div>
+              <div class="stat-card-value"><%= stats.customers %></div>
+              <div class="stat-card-label">Customers</div>
+           </a>
+
+           
+            <a href="/admin/sellers" class="stat-card pink stat-card-link">
+              <div class="stat-card-icon">🏪</div>
+              <div class="stat-card-value"><%= stats.sellers %></div>
+              <div class="stat-card-label">Sellers</div>
+            </a>
+            <a href="/admin/notifications" class="stat-card muted stat-card-link" style="border-style:solid;background:linear-gradient(135deg,#6C63FF,#5B4FE0);color:#fff">
+              <div class="stat-card-icon">🔔</div>
+              <div class="stat-card-value"><%= stats.notifications %></div>
+              <div class="stat-card-label">New Notifications</div>
+           </a>
+
+
+
+          </div>
+
+           
+
+
+          <% if (lowStock.length) { %>
+  <section class="dash-section">
+    <h2>Low Stock Alert</h2>
+    <table class="product-table">
+      <thead><tr><th>Image</th><th>Product</th><th>Stock Remaining</th></tr></thead>
+      <tbody>
+        <% lowStock.forEach(p => { %>
+          <tr>
+            <td><img src="<%= p.image_url || '/images/placeholder.png' %>" style="width:48px;height:48px;object-fit:cover;border-radius:6px"/></td>
+            <td><%= p.name %></td>
+            <td><span class="stock-badge stock-low"><%= p.stock_quantity %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+ <% } %>
+
+ <div class="chart-grid">
+  <section class="dash-section">
+    <h2>Sales Trend (Last 7 Days)</h2>
+    <canvas id="salesTrendChart" height="180"></canvas>
+  </section>
+
+  <section class="dash-section">
+    <h2>Product Stock Levels</h2>
+    <canvas id="stockChart" height="180"></canvas>
+  </section>
+</div>
+
+ <section class="dash-section" style="margin-top:1.5rem">
+  <h2>Top Selling Products</h2>
+
+  <% if (!topSelling.length) { %>
+    <p style="color:#9AA0AE;font-size:.9rem">No sales data yet — this will populate once orders start coming in.</p>
+  <% } else { %>
+    <% const maxUnits = Math.max(...topSelling.map(p => Number(p.units_sold))); %>
+    <div class="top-selling-list">
+      <% topSelling.forEach((p, idx) => { %>
+        <div class="top-selling-row">
+          <div class="top-selling-rank">#<%= idx + 1 %></div>
+          <img src="<%= p.image_url || '/images/placeholder.png' %>" class="top-selling-thumb"/>
+          <div class="top-selling-info">
+            <strong><%= p.name %></strong>
+            <div class="top-selling-bar-track">
+              <div class="top-selling-bar-fill" style="width:<%= (p.units_sold / maxUnits * 100).toFixed(0) %>%"></div>
+            </div>
+          </div>
+          <div class="top-selling-stats">
+            <div><%= p.units_sold %> sold</div>
+            <div class="top-selling-revenue">$<%= Number(p.revenue).toFixed(2) %></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+  <section class="dash-section" style="margin-top:1.5rem">
+  <h2>Top Sellers</h2>
+
+  <% if (!topSellers.length) { %>
+    <p style="color:#9AA0AE;font-size:.9rem">No seller sales yet.</p>
+  <% } else { %>
+    <% const maxSellerRevenue = Math.max(...topSellers.map(s => Number(s.revenue))); %>
+    <div class="top-selling-list">
+      <% topSellers.forEach((s, idx) => { %>
+        <div class="top-selling-row">
+          <div class="top-selling-rank">#<%= idx + 1 %></div>
+          <img src="<%= s.image_url || '/images/placeholder.png' %>" class="top-selling-thumb" style="border-radius:50%"/>
+          <div class="top-selling-info">
+            <strong><%= s.name %></strong>
+            <div class="top-selling-bar-track">
+              <div class="top-selling-bar-fill" style="width:<%= (s.revenue / maxSellerRevenue * 100).toFixed(0) %>%"></div>
+            </div>
+          </div>
+          <div class="top-selling-stats">
+            <div><%= s.units_sold %> sold</div>
+            <div class="top-selling-revenue">$<%= Number(s.revenue).toFixed(2) %></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+ <section class="dash-section" style="margin-top:1.5rem">
+  <h2>Stock Inventory</h2>
+
+  <div class="inventory-toolbar">
+    <input type="text" id="inventory-search" placeholder="Search product name..."/>
+    <button type="button" id="inventory-reset" class="btn-reset">Reset</button>
+  </div>
+
+  <table class="product-table" id="inventory-table">
+    <thead>
+      <tr>
+        <th>Sr. No.</th>
+        <th>Product</th>
+        <th>Variant Type</th>
+        <th>Variants</th>
+        <th>Stock</th>
+        <th>Low Stock Alert</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% inventory.forEach((p, idx) => { %>
+        <tr class="inventory-row" data-name="<%= p.name.toLowerCase() %>">
+          <td><%= idx + 1 %></td>
+          <td>
+            <div class="cart-product-cell">
+              <img class="cart-thumb" src="<%= p.image_url || '/images/placeholder.png' %>"/>
+              <strong><%= p.name %></strong>
+            </div>
+          </td>
+          <% if (p.variants.length === 0) { %>
+            <td>—</td>
+            <td>—</td>
+            <td>
+              <% if (p.stock_quantity <= 5) { %>
+                <span class="stock-badge stock-low"><%= p.stock_quantity %></span>
+              <% } else { %>
+                <span class="stock-badge stock-ok"><%= p.stock_quantity %></span>
+              <% } %>
+            </td>
+            <td>—</td>
+          <% } else if (p.variants.length === 1) { %>
+            <td>Single</td>
+            <td><%= p.variants[0].variant_name %></td>
+            <td>
+              <% if (p.variants[0].stock_quantity <= p.variants[0].low_stock_threshold) { %>
+                <span class="stock-badge stock-low"><%= p.variants[0].stock_quantity %></span>
+              <% } else { %>
+                <span class="stock-badge stock-ok"><%= p.variants[0].stock_quantity %></span>
+              <% } %>
+            </td>
+            <td><%= p.variants[0].low_stock_threshold %></td>
+          <% } else { %>
+            <td>Multiple</td>
+            <td>
+              <div class="variant-stack">
+                <% p.variants.forEach(v => { %>
+                <div><%= v.variant_name %></div>
+              <% }) %>
+              </div>
+              
+            </td>
+            <td>
+              <div class="variant-stack">
+                <% p.variants.forEach(v => { %>
+                <div>
+                  <% if (v.stock_quantity <= v.low_stock_threshold) { %>
+                    <span class="stock-badge stock-low"><%= v.stock_quantity %></span>
+                  <% } else { %>
+                    <span class="stock-badge stock-ok"><%= v.stock_quantity %></span>
+                  <% } %>
+                </div>
+              <% }) %>
+
+              </div>
+              
+            </td>
+            <td>
+              <div class="variant-stack">
+                <% p.variants.forEach(v => { %>
+                <div><%= v.low_stock_threshold %></div>
+              <% }) %>
+
+              </div>
+              
+            </td>
+          <% } %>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+  <script>
+  const dailySales = <%- JSON.stringify(dailySales) %>;
+  const allProducts = <%- JSON.stringify(allProducts) %>;
+
+  new Chart(document.getElementById('salesTrendChart'), {
+    type: 'line',
+    data: {
+      labels: dailySales.map(d => new Date(d.day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+      datasets: [{
+        label: 'Revenue ($)',
+        data: dailySales.map(d => Number(d.revenue)),
+        borderColor: '#D63384',
+        backgroundColor: 'rgba(214,51,132,0.12)',
+        fill: true,
+        tension: 0.35,
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+
+  new Chart(document.getElementById('stockChart'), {
+    type: 'bar',
+    data: {
+      labels: allProducts.map(p => p.name),
+      datasets: [{
+        label: 'Stock Quantity',
+        data: allProducts.map(p => p.stock_quantity),
+        backgroundColor: '#4A90D9',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+ </script>
+
+<script>
+  const invSearch = document.getElementById('inventory-search');
+  const invReset = document.getElementById('inventory-reset');
+  const invRows = document.querySelectorAll('.inventory-row');
+
+  invSearch.addEventListener('input', () => {
+    const term = invSearch.value.toLowerCase().trim();
+    invRows.forEach(row => {
+      row.style.display = row.dataset.name.includes(term) ? '' : 'none';
+    });
+  });
+
+  invReset.addEventListener('click', () => {
+    invSearch.value = '';
+    invRows.forEach(row => row.style.display = '');
+  });
+</script>
+
+       
+
+        </div>
+      </main>
+    </div>
+
+  </div>
+</body>
+</html>

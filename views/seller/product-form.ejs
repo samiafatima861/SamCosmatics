@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title><%= product.id ? 'Edit Product' : 'Add Product' %></title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
+  <main class="container admin-main" style="max-width:700px">
+
+    <div class="page-header">
+      <h1><%= product.id ? 'Edit Product' : 'Add Product' %></h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data"
+          action="<%= product.id ? '/seller/products/' + product.id + '/edit' : '/seller/products/new' %>"
+          class="form-grid product-form-card">
+
+      <div class="form-field">
+        <label>Name</label>
+        <input name="name" required value="<%= product.name || '' %>"/>
+      </div>
+
+      <div class="form-field">
+        <label>Price</label>
+        <input name="price" type="number" step="0.01" required value="<%= product.price || 0 %>"/>
+      </div>
+
+      <div class="form-field">
+        <label>Short description</label>
+        <input name="short_description" value="<%= product.short_description || '' %>"/>
+      </div>
+
+      <div class="form-field">
+        <label>Description</label>
+        <textarea name="description" rows="4"><%= product.description || '' %></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>Stock Quantity</label>
+        <input name="stock_quantity" type="number" min="0" required value="<%= product.stock_quantity ?? 0 %>"/>
+      </div>
+
+      <div class="form-field">
+        <label>Image file</label>
+        <% if (product.image_url) { %>
+          <img src="<%= product.image_url %>" class="admin-avatar-square"/>
+        <% } %>
+        <input type="file" name="image" accept="image/*"/>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-pink">Save</button>
+        <a href="/seller/dashboard" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,182 @@
+/* ============================================
+   SamCosmetics — Admin Dashboard
+   ============================================ */
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #FBF3F0;
+  margin: 0;
+  color: #241F1F;
+}
+
+/* ---------- Header ---------- */
+.dash-header {
+  background: #fff;
+  border-bottom: 1px solid #EFE1DC;
+}
+
+.dash-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.dash-header .logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #D63384;
+  text-decoration: none;
+}
+
+.dash-nav {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+
+.dash-profile-link {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  text-decoration: none;
+  color: #241F1F;
+  padding: .3rem .6rem .3rem .3rem;
+  border-radius: 999px;
+  transition: background .15s ease;
+}
+
+.dash-profile-link:hover {
+  background: #FBF0F5;
+}
+
+.dash-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #E4D6D1;
+}
+
+.dash-profile-name {
+  font-size: .92rem;
+  font-weight: 600;
+}
+
+.dash-logout-btn {
+  border: 1px solid #E4D6D1;
+  background: #fff;
+  color: #7A6C68;
+  padding: .5rem .9rem;
+  border-radius: 8px;
+  font-size: .88rem;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+
+.dash-logout-btn:hover {
+  border-color: #D63384;
+  color: #D63384;
+}
+
+/* ---------- Main / Welcome ---------- */
+.dash-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.dash-welcome-eyebrow {
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #D63384;
+  margin-bottom: .5rem;
+}
+
+.dash-welcome h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.1rem;
+  margin: 0 0 .35rem;
+}
+
+.dash-welcome p {
+  color: #7A6C68;
+  margin: 0 0 2.5rem;
+  font-size: 1rem;
+}
+
+/* ---------- Action cards ---------- */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.dash-card {
+  background: #fff;
+  border: 1px solid #EFE1DC;
+  border-radius: 14px;
+  padding: 1.6rem;
+  transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+}
+
+.dash-card:hover {
+  box-shadow: 0 12px 28px rgba(36,31,31,0.08);
+  transform: translateY(-2px);
+  border-color: #E9C9DA;
+}
+
+.dash-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #FBF0F5;
+  color: #D63384;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.dash-card h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.2rem;
+  margin: 0 0 .4rem;
+}
+
+.dash-card p {
+  color: #7A6C68;
+  font-size: .9rem;
+  margin: 0 0 1.1rem;
+  line-height: 1.5;
+}
+
+.dash-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  color: #D63384;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .92rem;
+}
+
+.dash-card-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  .dash-header-inner {
+    padding: .85rem 0;
+  }
+  .dash-profile-name {
+    display: none;
+  }
+  .dash-welcome h1 {
+    font-size: 1.7rem;
+  }
+}

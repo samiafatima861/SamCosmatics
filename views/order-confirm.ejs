@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Order Confirmed</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/order.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="/">SamCosmetics</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="order-confirm">
+      <div class="check-icon">✓</div>
+      <h1>Thank you</h1>
+      <p>Your order has been placed.</p>
+      <p><strong class="order-id">Order ID: <%= orderId %></strong></p>
+      <p>Payment method: Cash on Delivery. We will contact you for delivery details.</p>
+      <a href="/products">Continue shopping</a>
+    </div>
+  </main>
+</body>
+</html>

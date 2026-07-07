@@ -1,0 +1,337 @@
+/* ============================================
+   SamCosmetics — Admin Dashboard Layout
+   Sidebar + Topbar + Stat Cards
+   ============================================ */
+
+.admin-layout{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  min-height:100vh;
+  background:#F5F6FA;
+  font-family:'Inter',-apple-system,sans-serif;
+}
+
+/* ---------- Sidebar ---------- */
+.admin-sidebar{
+  background:#1F2430;
+  color:#C9CEDA;
+  padding:1.25rem 0;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+}
+.admin-sidebar-brand{
+  font-family:'Playfair Display',Georgia,serif;
+  color:#fff;
+  font-size:1.2rem;
+  font-weight:700;
+  padding:0 1.25rem 1.25rem;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  margin-bottom:.75rem;
+  text-decoration:none;
+  display:block;
+}
+.admin-nav-link{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  padding:.7rem 1.25rem;
+  color:#C9CEDA;
+  text-decoration:none;
+  font-size:.92rem;
+  transition:background .15s ease,color .15s ease;
+  border-left:3px solid transparent;
+}
+.admin-nav-link:hover{
+  background:rgba(255,255,255,0.05);
+  color:#fff;
+}
+.admin-nav-link.active{
+  background:rgba(214,51,132,0.15);
+  color:#fff;
+  border-left-color:#D63384;
+}
+.admin-nav-icon{
+  width:18px;
+  text-align:center;
+}
+
+/* ---------- Topbar ---------- */
+.admin-topbar{
+  background:#fff;
+  border-bottom:1px solid #EAEAF0;
+  padding:.9rem 1.75rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.admin-topbar h2{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  font-size:1.15rem;
+  color:#1F2430;
+}
+.admin-topbar-account{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+}
+.admin-topbar-avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  object-fit:cover;
+}
+.admin-topbar-name{
+  font-size:.9rem;
+  font-weight:600;
+  color:#1F2430;
+}
+.admin-topbar form button{
+  border:1px solid #E4E4EC;
+  background:#fff;
+  color:#7A7E8C;
+  padding:.4rem .8rem;
+  border-radius:7px;
+  font-size:.85rem;
+  cursor:pointer;
+}
+.admin-topbar form button:hover{
+  border-color:#D63384;
+  color:#D63384;
+}
+
+/* ---------- Content ---------- */
+.admin-content{
+  padding:1.75rem;
+}
+.admin-content h1{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1.6rem;
+  margin:0 0 1.5rem;
+  color:#1F2430;
+}
+
+/* ---------- Stat cards ---------- */
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.1rem;
+  margin-bottom:2rem;
+}
+.stat-card{
+  border-radius:12px;
+  padding:1.25rem 1.4rem;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.stat-card-value{
+  font-size:2rem;
+  font-weight:700;
+  line-height:1;
+  margin-bottom:.3rem;
+}
+.stat-card-label{
+  font-size:.88rem;
+  opacity:.9;
+}
+.stat-card-icon{
+  position:absolute;
+  top:1rem;
+  right:1.1rem;
+  font-size:1.5rem;
+  opacity:.85;
+}
+.stat-card.blue{ background:linear-gradient(135deg,#4A90D9,#3E7FC4); }
+.stat-card.orange{ background:linear-gradient(135deg,#F2A54A,#E38F2E); }
+.stat-card.pink{ background:linear-gradient(135deg,#D6478C,#BE3676); }
+.stat-card.muted{
+  background:#fff;
+  color:#9AA0AE;
+  border:1.5px dashed #D9DCE5;
+}
+.stat-card.muted .stat-card-value{ color:#B7BCC9; }
+.stat-card-soon{
+  display:inline-block;
+  font-size:.7rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  background:#EEF0F5;
+  color:#9AA0AE;
+  padding:.15rem .5rem;
+  border-radius:999px;
+  margin-top:.4rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .admin-layout{ grid-template-columns:1fr; }
+  .admin-sidebar{
+    position:relative;
+    height:auto;
+    display:flex;
+    overflow-x:auto;
+    padding:.75rem 0;
+  }
+  .admin-sidebar-brand{ display:none; }
+  .admin-nav-link{
+    white-space:nowrap;
+    border-left:none;
+    border-bottom:3px solid transparent;
+  }
+  .admin-nav-link.active{
+    border-left:none;
+    border-bottom-color:#D63384;
+  }
+}
+.stat-card-link{
+  text-decoration:none;
+  display:block;
+  cursor:pointer;
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.stat-card-link:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 24px rgba(0,0,0,0.15);
+}
+.dash-section{
+  background:#fff;
+  border-radius:12px;
+  padding:1.5rem;
+  border:1px solid #EAEAF0;
+}
+.dash-section h2{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1.15rem;
+  margin:0 0 1rem;
+}
+/* ---------- Inventory table container ---------- */
+.inventory-scroll{
+  max-height:480px;
+  overflow-y:auto;
+  border:1px solid #EAEAF0;
+  border-radius:10px;
+}
+.inventory-scroll .product-table{
+  box-shadow:none;
+  border-radius:0;
+}
+.inventory-scroll thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+/* ---------- Compact variant rows inside a cell ---------- */
+.variant-stack{
+  display:flex;
+  flex-direction:column;
+}
+.variant-stack > div{
+  padding:.4rem 0;
+  font-size:.88rem;
+  line-height:1.2;
+}
+.variant-stack > div:not(:last-child){
+  border-bottom:1px solid #F0F0F5;
+}
+
+/* ---------- Keep product/name cell aligned to top when variants stack ---------- */
+.product-table td{
+  vertical-align:top;
+}
+.product-table td .cart-product-cell{
+  padding-top:.3rem;
+}
+
+/* ---------- Tighter overall row padding for the dashboard version ---------- */
+.dash-section .product-table th,
+.dash-section .product-table td{
+  padding:.6rem .8rem;
+  font-size:.9rem;
+}
+.dash-section .cart-thumb{
+  width:44px;
+  height:44px;
+}
+.top-selling-list{
+  display:flex;
+  flex-direction:column;
+  gap:.9rem;
+}
+.top-selling-row{
+  display:grid;
+  grid-template-columns:36px 44px 1fr auto;
+  align-items:center;
+  gap:.9rem;
+}
+.top-selling-rank{
+  font-weight:700;
+  color:#D63384;
+  text-align:center;
+}
+.top-selling-thumb{
+  width:44px;
+  height:44px;
+  object-fit:cover;
+  border-radius:8px;
+}
+.top-selling-info strong{
+  display:block;
+  font-size:.92rem;
+  margin-bottom:.3rem;
+}
+.top-selling-bar-track{
+  background:#F0F0F5;
+  border-radius:999px;
+  height:6px;
+  overflow:hidden;
+}
+.top-selling-bar-fill{
+  background:linear-gradient(90deg,#D63384,#F2A54A);
+  height:100%;
+  border-radius:999px;
+}
+.top-selling-stats{
+  text-align:right;
+  font-size:.85rem;
+  color:#7A6C68;
+  white-space:nowrap;
+}
+.top-selling-revenue{
+  font-weight:700;
+  color:#1F2430;
+}
+
+.chart-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
+  gap:1.25rem;
+  margin-bottom:1.5rem;
+}
+.chart-grid canvas{
+  max-height:260px;
+}
+.dash-section{
+  position:relative;
+}
+.notif-bell{
+  position:relative;
+  text-decoration:none;
+  font-size:1.3rem;
+  margin-right:.5rem;
+}
+.notif-badge{
+  position:absolute;
+  top:-6px;
+  right:-8px;
+  background:#D63384;
+  color:#fff;
+  font-size:.68rem;
+  font-weight:700;
+  padding:.1rem .4rem;
+  border-radius:999px;
+  line-height:1.2;
+}

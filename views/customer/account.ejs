@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>My Account</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+      <a class="logo" href="/">SamCosmetics</a>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <span><%= customer.name %></span>
+        <form action="/logout" method="post" style="display:inline">
+          <button type="submit" class="btn btn-dark">Logout</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <div class="page-header">
+      <h1>My Account</h1>
+      <a href="/account/edit" class="btn-create">Edit Profile</a>
+    </div>
+
+    <h2>Order History</h2>
+    <% if (!orders.length) { %>
+      <p style="color:#7A6C68">You haven't placed any orders yet. <a href="/products">Start shopping</a></p>
+    <% } else { %>
+      <table class="product-table">
+        <thead><tr><th>Order #</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th></tr></thead>
+        <tbody>
+          <% orders.forEach(o => { %>
+            <tr>
+              <td><%= o.id %></td>
+              <td>$<%= Number(o.total).toFixed(2) %></td>
+              <td><%= o.status %></td>
+              <td><%= o.payment_method %></td>
+              <td><%= new Date(o.created_at).toLocaleDateString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </main>
+</body>
+</html>

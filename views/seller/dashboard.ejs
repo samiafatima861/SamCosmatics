@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Seller Dashboard</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+      <a class="logo" href="/">SamCosmetics</a>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <span><%= seller.name %></span>
+        <form action="/seller/logout" method="post" style="display:inline">
+          <button type="submit" class="btn btn-dark">Logout</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <div class="page-header">
+      <h1>My Products</h1>
+      <a href="/seller/products/new" class="btn-create">+ Add Product</a>
+    </div>
+
+    <% if (!products.length) { %>
+      <p style="color:#7A6C68">You haven't listed any products yet.</p>
+    <% } else { %>
+      <table class="product-table">
+        <thead><tr><th>#</th><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% products.forEach(p => { %>
+            <tr>
+              <td><%= p.id %></td>
+              <td><img src="<%= p.image_url || '/images/placeholder.png' %>"/></td>
+              <td><%= p.name %></td>
+              <td>$<%= Number(p.price).toFixed(2) %></td>
+              <td>
+                <% if (p.stock_quantity <= 5) { %>
+                  <span class="stock-badge stock-low"><%= p.stock_quantity %></span>
+                <% } else { %>
+                  <span class="stock-badge stock-ok"><%= p.stock_quantity %></span>
+                <% } %>
+              </td>
+              <td>
+                <a href="/seller/products/<%= p.id %>/edit">Edit</a>
+                <form action="/seller/products/<%= p.id %>/delete" method="post" style="display:inline">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </main>
+</body>
+</html>

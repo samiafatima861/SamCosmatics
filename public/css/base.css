@@ -1,0 +1,93 @@
+/* ============================================
+   SamCosmetics — Global Design Tokens
+   Import this on EVERY page, before any
+   page-specific stylesheet.
+   ============================================ */
+
+:root {
+  /* Colors */
+  --color-bg:        #FBF3F0;
+  --color-surface:   #FFFFFF;
+  --color-text:      #241F1F;
+  --color-muted:     #7A6C68;
+  --color-border:    #EFE1DC;
+  --color-brand:     #D63384;
+  --color-brand-dark:#BC2A72;
+  --color-brand-soft:#FBF0F5;
+  --color-gold:      #C9A24B;
+  --color-error-bg:  #FBEAEA;
+  --color-error-bd:  #EFC6C6;
+  --color-error-tx:  #A32B2B;
+
+  /* Type */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+
+  /* Radius / shadow */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 12px 28px rgba(36,31,31,0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  margin: 0 0 .5rem;
+}
+
+a {
+  color: var(--color-brand);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Reusable buttons — use across every page */
+.btn {
+  display: inline-block;
+  padding: .65rem 1.1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  font-size: .95rem;
+  font-weight: 600;
+  transition: background .15s ease, transform .1s ease;
+}
+.btn-primary { background: var(--color-brand); color: #fff; }
+.btn-primary:hover { background: var(--color-brand-dark); }
+.btn-secondary { background: #fff; border: 1px solid var(--color-border); color: var(--color-text); }
+.btn-secondary:hover { border-color: var(--color-brand); color: var(--color-brand); }
+
+/* Reusable alert boxes */
+.alert-error {
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-bd);
+  color: var(--color-error-tx);
+  padding: .7rem .9rem;
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+  margin-bottom: 1rem;
+}
+.alert-success {
+  background: #EAF7EE;
+  border: 1px solid #C9E9D3;
+  color: #1E6B36;
+  padding: .7rem .9rem;
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+  margin-bottom: 1rem;
+}

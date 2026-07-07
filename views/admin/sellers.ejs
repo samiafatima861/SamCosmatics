@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Sellers</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
+  <main class="container admin-main">
+    <div class="page-header"><h1>Sellers</h1></div>
+    <p class="page-subtext">Review and manage seller applications.</p>
+
+    <% if (!sellers.length) { %>
+      <div class="empty-state">No sellers have applied yet.</div>
+    <% } else { %>
+      <table class="product-table">
+        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+        <tbody>
+          <% sellers.forEach(s => { %>
+            <tr>
+              <td><%= s.id %></td>
+              <td><%= s.name %></td>
+              <td><%= s.email %></td>
+              <td><%= s.phone || '—' %></td>
+              <td><span class="status-badge status-<%= s.status %>"><%= s.status %></span></td>
+               <td><%= s.product_count %></td>
+               <td><%= s.units_sold %></td>
+               <td>$<%= Number(s.revenue).toFixed(2) %></td>
+              <td><%= new Date(s.created_at).toLocaleDateString() %></td>
+              <td>
+                <% if (s.status !== 'approved') { %>
+                  <form action="/admin/sellers/<%= s.id %>/approve" method="post" style="display:inline">
+                    <button type="submit">Approve</button>
+                  </form>
+                <% } %>
+                <% if (s.status !== 'rejected') { %>
+                  <form action="/admin/sellers/<%= s.id %>/reject" method="post" style="display:inline">
+                    <button type="submit">Reject</button>
+                  </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </main>
+</body>
+</html>

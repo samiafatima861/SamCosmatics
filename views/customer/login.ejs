@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
+  <main class="container admin-main" style="max-width:420px">
+    <h1>Login</h1>
+
+    <% if (typeof error !== 'undefined') { %>
+      <div class="alert-error"><%= error %></div>
+    <% } %>
+
+    <form method="post" action="/login" class="form-grid">
+      <div class="form-field">
+        <label>Email</label>
+        <input name="email" type="email" required/>
+      </div>
+      <div class="form-field">
+        <label>Password</label>
+        <input name="password" type="password" required/>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-pink">Sign in</button>
+      </div>
+    </form>
+
+    <p style="margin-top:1rem">Don't have an account? <a href="/signup">Create one</a></p>
+  </main>
+</body>
+</html>

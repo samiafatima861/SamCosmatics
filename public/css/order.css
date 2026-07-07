@@ -1,0 +1,7 @@
+.order-confirm{max-width:600px;margin:3rem auto;text-align:center;background:#fff;border:1px solid #eee;border-radius:12px;padding:2.5rem}
+.order-confirm .check-icon{width:56px;height:56px;border-radius:50%;background:#e7f7ec;color:#1e6b36;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.6rem}
+.order-confirm h1{margin:0 0 .5rem}
+.order-confirm p{color:var(--muted);margin:.35rem 0}
+.order-confirm .order-id{font-weight:700;color:#222}
+.order-confirm a{display:inline-block;margin-top:1.5rem;color:var(--accent);text-decoration:none;font-weight:600}
+.order-confirm a:hover{text-decoration:underline}

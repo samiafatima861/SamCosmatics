@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SamCosmetics</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/css/home.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="/">SamCosmetics</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav-menu">
+        <a href="/">Home</a>
+        <a href="products">Shop</a>
+        <a href="/about">About</a>
+        <a href="contact">Contact</a>
+        <a href="wishlist">Wishlist</a>
+        <a href="/seller/login">Sell on SamCosmetics</a>
+
+        <% if (customer) { %>
+          <div class="admin-info">
+            <span><%= customer.name %></span>
+            <a href="/account" style="margin-left:.5rem">My Account</a>
+            <form action="/logout" method="post" style="display:inline;margin-left:.5rem">
+              <button type="submit">Logout</button>
+           </form>
+         </div>
+         <% } else { %>
+         <a href="/login">Login</a>
+         <a href="/signup">Sign Up</a>
+       <% } %>
+
+        <% if (admin) { %>
+          <div class="admin-info">
+            <img class="admin-avatar-sm" src="<%= admin.image_url || '/images/admin-placeholder.png' %>" alt="admin"/>
+            <span><%= admin.name %></span>
+            <form action="/admin/logout" method="post">
+              <button type="submit">Logout</button>
+            </form>
+          </div>
+        <% } else { %>
+          <a class="admin-link" href="/admin/login">Admin</a>
+        <% } %>
+        <a id="cart-link" href="/cart" style="margin-left:1rem">Cart (<span id="cart-count"><%= cartCount %></span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="hero-content container">
+      <h1>SamCosmetics</h1>
+      <p>Natural beauty. Bold looks.</p>
+      <a class="btn" href="products">Shop Now</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> SamCosmetics. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+      navToggle.classList.toggle('open');
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Checkout - SamCosmetics</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/checkout.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="/">SamCosmetics</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/products">Shop</a>
+        <a href="/cart">Cart</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container checkout-wrap">
+    <h1>Checkout</h1>
+
+    <% if (typeof error !== 'undefined') { %>
+      <div class="checkout-error"><%= error %></div>
+    <% } %>
+
+    <section class="checkout-summary">
+      <h2>Order summary</h2>
+      <% products.forEach(p => { %>
+        <div class="checkout-item">
+          <img src="<%= p.image_url || '/images/placeholder.png' %>" alt=""/>
+          <div>
+            <strong><%= p.name %></strong><br/>
+            Qty: <%= p.qty %> — $<%= p.subtotal.toFixed(2) %>
+          </div>
+        </div>
+      <% }) %>
+      <p class="checkout-total"><strong>Total: $<%= total.toFixed(2) %></strong></p>
+    </section>
+
+    <form method="post" action="/checkout" class="checkout-form">
+      <h2>Shipping information</h2>
+      <input name="fullName" placeholder="Full name" required value="<%= customer ? customer.name : '' %>"/>
+      <input name="email" type="email" placeholder="Email" required value="<%= customer ? customer.email : '' %>"/>
+      <input name="phone" placeholder="Phone (optional)"/>
+      <textarea name="shippingAddress" placeholder="Shipping address" required></textarea>
+
+      <h2>Billing address (optional)</h2>
+      <textarea name="billingAddress" placeholder="Billing address (leave blank to use shipping)"></textarea>
+
+      <h2>Payment method</h2>
+      <label><input type="radio" name="paymentMethod" value="COD" checked> Cash on Delivery (pay on delivery)</label>
+
+      <div>
+        <button type="submit" class="btn-confirm">Confirm order (COD)</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

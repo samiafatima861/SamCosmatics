@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Stock Inventory</title>
+  <link rel="stylesheet" href="/css/products.css"/>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
+  <main class="container admin-main">
+    <div class="page-header">
+      <h1>Stock Inventory</h1>
+    </div>
+    <p class="page-subtext">Track stock levels across all products and variants.</p>
+
+      <% if (!products.length) { %>
+  <div class="empty-state">No products yet.</div>
+<% } else { %>
+
+    <div class="inventory-toolbar">
+      <input type="text" id="inventory-search" placeholder="Search product name..."/>
+      <button type="button" id="inventory-reset" class="btn-reset">Reset</button>
+    </div>
+
+
+    <table class="product-table" id="inventory-table">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Product</th>
+          <th>Variant Type</th>
+          <th>Variants</th>
+          <th>Stock</th>
+          <th>Low Stock Alert</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach((p, idx) => { %>
+          <tr class="inventory-row" data-name="<%= p.name.toLowerCase() %>">
+            <td><%= idx + 1 %></td>
+            <td>
+              <div class="cart-product-cell">
+                <img class="cart-thumb" src="<%= p.image_url || '/images/placeholder.png' %>"/>
+                <strong><%= p.name %></strong>
+              </div>
+            </td>
+            <% if (p.variants.length === 0) { %>
+              <td>—</td>
+              <td>—</td>
+              <td>
+                <% if (p.stock_quantity <= 5) { %>
+                  <span class="stock-badge stock-low"><%= p.stock_quantity %></span>
+                <% } else { %>
+                  <span class="stock-badge stock-ok"><%= p.stock_quantity %></span>
+                <% } %>
+              </td>
+              <td>—</td>
+            <% } else if (p.variants.length === 1) { %>
+              <td>Single</td>
+              <td><%= p.variants[0].variant_name %></td>
+              <td>
+                <% if (p.variants[0].stock_quantity <= p.variants[0].low_stock_threshold) { %>
+                  <span class="stock-badge stock-low"><%= p.variants[0].stock_quantity %></span>
+                <% } else { %>
+                  <span class="stock-badge stock-ok"><%= p.variants[0].stock_quantity %></span>
+                <% } %>
+              </td>
+              <td><%= p.variants[0].low_stock_threshold %></td>
+            <% } else { %>
+              <td>Multiple</td>
+              <td>
+                <% p.variants.forEach(v => { %>
+                  <div><%= v.variant_name %></div>
+                <% }) %>
+              </td>
+              <td>
+                <% p.variants.forEach(v => { %>
+                  <div>
+                    <% if (v.stock_quantity <= v.low_stock_threshold) { %>
+                      <span class="stock-badge stock-low"><%= v.stock_quantity %></span>
+                    <% } else { %>
+                      <span class="stock-badge stock-ok"><%= v.stock_quantity %></span>
+                    <% } %>
+                  </div>
+                <% }) %>
+              </td>
+              <td>
+                <% p.variants.forEach(v => { %>
+                  <div><%= v.low_stock_threshold %></div>
+                <% }) %>
+              </td>
+            <% } %>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <% } %>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('inventory-search');
+    const resetBtn = document.getElementById('inventory-reset');
+    const rows = document.querySelectorAll('.inventory-row');
+
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase().trim();
+      rows.forEach(row => {
+        row.style.display = row.dataset.name.includes(term) ? '' : 'none';
+      });
+    });
+
+    resetBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      rows.forEach(row => row.style.display = '');
+    });
+  </script>
+</body>
+</html>

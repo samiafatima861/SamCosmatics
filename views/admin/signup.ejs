@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Admin Signup</title><link rel="stylesheet" href="/css/products.css"></head>
+<body>
+<main class="container" style="max-width:480px;margin:3rem auto">
+  <h1>Admin Signup</h1>
+  <% if (typeof error !== 'undefined') { %><div style="color:#b00"><%= error %></div><% } %>
+  <form method="post" action="/admin/signup">
+    <label>Name</label><br/><input name="name" value="<%= form?.name||'' %>" required/><br/>
+    <label>Email</label><br/><input name="email" value="<%= form?.email||'' %>" type="email" required/><br/>
+    <label>Password</label><br/><input name="password" type="password" required/><br/>
+    <label>Phone</label><br/><input name="phone" value="<%= form?.phone||'' %>"/><br/>
+    <label>Address</label><br/><textarea name="address"><%= form?.address||'' %></textarea><br/>
+    <button type="submit" class="btn">Create account</button>
+  </form>
+  <p>Already have an account? <a href="/admin/login">Login</a></p>
+</main>
+</body>
+</html>
