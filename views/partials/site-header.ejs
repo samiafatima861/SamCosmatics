@@ -1,0 +1,69 @@
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="/">
+      <% if (siteSettings?.logo_url) { %>
+        <img src="<%= siteSettings.logo_url %>" alt="<%= siteSettings?.site_name || 'SamCosmetics' %>"/>
+      <% } else { %>
+        <%= siteSettings?.site_name || 'SamCosmetics' %>
+      <% } %>
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav" id="nav-menu">
+      <a href="/">Home</a>
+      <a href="/products">Shop</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/blog">Blog</a>
+      <a href="/faq">FAQs</a>
+      <a href="/wishlist">Wishlist</a>
+      <a href="/seller/login">Sell on SamCosmetics</a>
+
+      <% if (typeof seller !== 'undefined' && seller) { %>
+        <div class="admin-info">
+          <span>🏪 <%= seller.name %></span>
+          <a href="/seller/dashboard">Seller Dashboard</a>
+          <form action="/seller/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+      <% } else if (typeof customer !== 'undefined' && customer) { %>
+        <div class="admin-info">
+          <span><%= customer.name %></span>
+          <a href="/account">My Account</a>
+          <form action="/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+      <% } else if (typeof admin !== 'undefined' && admin) { %>
+        <div class="admin-info">
+          <img class="admin-avatar-sm" src="<%= admin.image_url || '/images/admin-placeholder.png' %>" alt="admin"/>
+          <span><%= admin.name %></span>
+          <form action="/admin/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+        <a class="admin-link" href="/admin/login">Admin</a>
+      <% } %>
+
+      <a id="cart-link" href="/cart">Cart (<span id="cart-count"><%= typeof cartCount !== 'undefined' ? cartCount : 0 %></span>)</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+      navToggle.classList.toggle('open');
+    });
+  }
+</script>

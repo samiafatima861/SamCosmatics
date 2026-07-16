@@ -1,23 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>SamCosmetics</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/css/home.css" />
+  <%- include('partials/head', { title: '', styles: ['home', 'home-pro'] }) %>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <a class="logo" href="/">SamCosmetics</a>
+      <a class="logo" href="/">
+        <% if (siteSettings?.logo_url) { %>
+          <img src="<%= siteSettings.logo_url %>" style="height:32px;vertical-align:middle"/>
+        <% } else { %>
+          <%= siteSettings?.site_name || 'SamCosmetics' %>
+        <% } %>
+      </a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
       <nav class="nav" id="nav-menu">
         <a href="/">Home</a>
-        <a href="products">Shop</a>
+        <a href="/products">Shop</a>
         <a href="/about">About</a>
-        <a href="contact">Contact</a>
+        <a href="/contact">Contact</a>
         <a href="wishlist">Wishlist</a>
         <a href="/seller/login">Sell on SamCosmetics</a>
 
@@ -27,16 +30,16 @@
             <a href="/account" style="margin-left:.5rem">My Account</a>
             <form action="/logout" method="post" style="display:inline;margin-left:.5rem">
               <button type="submit">Logout</button>
-           </form>
-         </div>
-         <% } else { %>
-         <a href="/login">Login</a>
-         <a href="/signup">Sign Up</a>
-       <% } %>
+            </form>
+          </div>
+        <% } else { %>
+          <a href="/login">Login</a>
+          <a href="/signup">Sign Up</a>
+        <% } %>
 
         <% if (admin) { %>
           <div class="admin-info">
-            <img class="admin-avatar-sm" src="<%= admin.image_url || '/images/admin-placeholder.png' %>" alt="admin"/>
+            <img class="admin-avatar-sm" src="<%= admin.image_url || '/images/placeholder.png' %>" alt="admin"/>
             <span><%= admin.name %></span>
             <form action="/admin/logout" method="post">
               <button type="submit">Logout</button>
@@ -52,28 +55,90 @@
 
   <main class="hero">
     <div class="hero-content container">
-      <h1>SamCosmetics</h1>
+      <h1><%= siteSettings?.site_name || 'SamCosmetics' %></h1>
       <p>Natural beauty. Bold looks.</p>
-      <a class="btn" href="products">Shop Now</a>
+      <a class="btn" href="/products">Shop Now</a>
     </div>
   </main>
 
+  <!-- Shop by Category -->
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <h2 style="color:#241F1F">Shop by Category</h2>
+        <p>Find exactly what you're looking for</p>
+      </div>
+
+      <div class="category-grid">
+        <% categories.forEach(c => { %>
+          <a href="/products?category=<%= c.id %>" class="cat-card">
+            <img src="<%= c.image_url || '/images/placeholder.png' %>" alt="<%= c.name %>"/>
+            <div class="cat-card-arrow">→</div>
+            <div class="cat-card-label">
+              <h3><%= c.name %></h3>
+              <span><%= c.product_count %> products</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section" style="background:#FAFAFA">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Featured Products</h2>
+        <p>Our latest additions to the collection</p>
+      </div>
+
+      <div class="featured-grid">
+        <% featuredProducts.forEach(p => { %>
+          <a href="/products/<%= p.id %>" class="featured-card">
+            <img src="<%= p.image_url || '/images/placeholder.png' %>" alt="<%= p.name %>"/>
+            <div class="featured-card-body">
+              <h4><%= p.name %></h4>
+              <div class="featured-card-price">$<%= Number(p.price).toFixed(2) %></div>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; <span id="year"></span> SamCosmetics. All rights reserved.</p>
+      <p><%= siteSettings?.copyright_text || ('© ' + new Date().getFullYear() + ' ' + (siteSettings?.site_name || 'SamCosmetics') + '. All rights reserved.') %></p>
+      <div class="footer-social">
+        <% if (siteSettings?.facebook_url) { %><a href="<%= siteSettings.facebook_url %>" target="_blank">Facebook</a><% } %>
+        <% if (siteSettings?.instagram_url) { %><a href="<%= siteSettings.instagram_url %>" target="_blank">Instagram</a><% } %>
+        <% if (siteSettings?.twitter_url) { %><a href="<%= siteSettings.twitter_url %>" target="_blank">Twitter</a><% } %>
+        <% if (siteSettings?.tiktok_url) { %><a href="<%= siteSettings.tiktok_url %>" target="_blank">TikTok</a><% } %>
+      </div>
     </div>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
   <script>
-  const navToggle = document.getElementById('nav-toggle');
-  const navMenu = document.getElementById('nav-menu');
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('open');
-      navToggle.classList.toggle('open');
-    });
-  }
-</script>
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+        navToggle.classList.toggle('open');
+      });
+    }
+
+    // Scroll-triggered fade-in for category + featured cards
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.cat-card, .featured-card').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>

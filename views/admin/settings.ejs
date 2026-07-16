@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'Site Settings', styles: ['admin-layout', 'products', 'admin', 'settings'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+
+    <%- include('../partials/admin-sidebar', { active: 'settings' }) %>
+
+    <div>
+      <header class="admin-topbar">
+        <h2>Site Settings</h2>
+        <div class="admin-topbar-account">
+          <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="admin" class="admin-topbar-avatar"/>
+          <span class="admin-topbar-name"><%= admin?.name %></span>
+          <form action="/admin/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+      </header>
+
+      <main class="admin-content">
+        <div class="page-wrap">
+          <div class="settings-shell">
+
+            <div>
+              <h1 class="page-title">Site settings</h1>
+              <p class="page-sub">Changes apply across your entire storefront.</p>
+
+              <% if (typeof query !== 'undefined' && query?.saved) { %>
+                <div class="success-banner" style="display:block">Settings saved successfully</div>
+              <% } %>
+
+              <form method="post" action="/admin/settings" enctype="multipart/form-data">
+
+                <!-- Brand -->
+                <div class="section-card" id="brand">
+                  <div class="section-label">Brand</div>
+
+                  <div class="field">
+                    <label>Site name</label>
+                    <input name="site_name" value="<%= settings.site_name || '' %>" placeholder="Your store name"/>
+                  </div>
+
+                  <div class="field">
+                    <label>Logo</label>
+                    <div class="upload-row">
+                      <% if (settings.logo_url) { %>
+                        <img src="<%= settings.logo_url %>" class="upload-preview"/>
+                      <% } else { %>
+                        <div class="upload-preview"></div>
+                      <% } %>
+                      <div class="upload-info">
+                        <div class="hint">Recommended: 200×60 px, PNG or SVG</div>
+                        <label class="upload-btn">📁 Choose file<input type="file" name="logo" accept="image/*" style="display:none"/></label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label>Favicon</label>
+                    <div class="upload-row">
+                      <% if (settings.favicon_url) { %>
+                        <img src="<%= settings.favicon_url %>" class="upload-preview" style="width:40px;height:40px"/>
+                      <% } else { %>
+                        <div class="upload-preview" style="width:40px;height:40px"></div>
+                      <% } %>
+                      <div class="upload-info">
+                        <div class="hint">32×32 px ICO or PNG</div>
+                        <label class="upload-btn">📁 Choose file<input type="file" name="favicon" accept="image/*" style="display:none"/></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="section-card" id="contact">
+                  <div class="section-label">Contact</div>
+                  <div class="two-col">
+                    <div class="field">
+                      <label>Email</label>
+                      <input name="contact_email" type="email" value="<%= settings.contact_email || '' %>"/>
+                    </div>
+                    <div class="field">
+                      <label>Phone</label>
+                      <input name="contact_phone" value="<%= settings.contact_phone || '' %>"/>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Address</label>
+                    <textarea name="address"><%= settings.address || '' %></textarea>
+                  </div>
+                </div>
+
+                <!-- About & Footer -->
+                <div class="section-card" id="about">
+                  <div class="section-label">About &amp; Footer</div>
+                  <div class="field">
+                    <label>About text</label>
+                    <textarea name="about_text" rows="3"><%= settings.about_text || '' %></textarea>
+                  </div>
+                  <div class="field">
+                    <label>Copyright text</label>
+                    <input name="copyright_text" value="<%= settings.copyright_text || '' %>" placeholder="© 2026 SamCosmetics. All rights reserved."/>
+                  </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="section-card" id="social">
+                  <div class="section-label">Social links</div>
+                  <div class="social-grid">
+                    <div class="social-field">
+                      <span>f</span>
+                      <input name="facebook_url" type="text" value="<%= settings.facebook_url || '' %>" placeholder="Facebook URL"/>
+                    </div>
+                    <div class="social-field">
+                      <span>ig</span>
+                      <input name="instagram_url" type="text" value="<%= settings.instagram_url || '' %>" placeholder="Instagram URL"/>
+                    </div>
+                    <div class="social-field">
+                      <span>x</span>
+                      <input name="twitter_url" type="text" value="<%= settings.twitter_url || '' %>" placeholder="Twitter / X URL"/>
+                    </div>
+                    <div class="social-field">
+                      <span>tt</span>
+                      <input name="tiktok_url" type="text" value="<%= settings.tiktok_url || '' %>" placeholder="TikTok URL"/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-footer">
+                  <a class="btn-cancel" href="/admin">Cancel</a>
+                  <button type="submit" class="btn-save">Save settings</button>
+                </div>
+
+              </form>
+            </div>
+
+            <nav class="settings-rail">
+              <a href="#brand" class="active">Brand</a>
+              <a href="#contact">Contact</a>
+              <a href="#about">About</a>
+              <a href="#social">Social</a>
+            </nav>
+
+          </div>
+        </div>
+      </main>
+    </div>
+
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.section-card');
+    const links = document.querySelectorAll('.settings-rail a');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const match = document.querySelector(`.settings-rail a[href="#${entry.target.id}"]`);
+          if (match) match.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>

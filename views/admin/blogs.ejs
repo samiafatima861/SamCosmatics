@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'Blogs', styles: ['admin-layout', 'revenue-pro'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'blogs' }) %>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Blogs</h2>
+        <a href="/admin/blogs/new" class="btn-create">+ New Post</a>
+      </header>
+      <div class="pro-content">
+        <div class="pro-panel">
+          <table class="pro-table">
+            <thead><tr><th>Title</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+            <tbody>
+              <% blogs.forEach(b => { %>
+                <tr>
+                  <td><%= b.title %></td>
+                  <td><span class="pro-pill pill-<%= b.status === 'published' ? 'approved' : 'pending' %>"><%= b.status %></span></td>
+                  <td><%= new Date(b.created_at).toLocaleDateString() %></td>
+                  <td>
+                    <a href="/admin/blogs/<%= b.id %>/edit" style="color:#3E7FC4;font-weight:600;text-decoration:none;margin-right:.5rem">Edit</a>
+                    <form action="/admin/blogs/<%= b.id %>/delete" method="post" style="display:inline">
+                      <button type="submit" style="background:none;border:none;color:#E0554F;cursor:pointer;font-weight:600">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

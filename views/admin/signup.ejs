@@ -1,6 +1,10 @@
 <!doctype html>
 <html>
-<head><meta charset="utf-8"><title>Admin Signup</title><link rel="stylesheet" href="/css/products.css"></head>
+<!-- <head><meta charset="utf-8"><title>Admin Signup</title><link rel="stylesheet" href="/css/products.css"></head> -->
+ <head>
+  <%- include('../partials/head', { title: 'Admin Signup', styles: [products'] }) %>
+  <%- include('../partials/admin-sidebar', { active: 'orders' }) %>
+</head>
 <body>
 <main class="container" style="max-width:480px;margin:3rem auto">
   <h1>Admin Signup</h1>

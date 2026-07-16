@@ -1,35 +1,50 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Customers</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Customers', styles: ['admin-layout', 'revenue-pro'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main">
-    <div class="page-header"><h1>Customers</h1></div>
-    <p class="page-subtext">Everyone with a registered account.</p>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'customers' }) %>
 
-    <% if (!customers.length) { %>
-      <div class="empty-state">No customers yet.</div>
-    <% } else { %>
-      <table class="product-table">
-        <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead>
-        <tbody>
-          <% customers.forEach(c => { %>
-            <tr>
-              <td><%= c.id %></td>
-              <td><%= c.name %></td>
-              <td><%= c.email %></td>
-              <td><%= c.phone || '—' %></td>
-              <td><%= new Date(c.created_at).toLocaleDateString() %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    <% } %>
-  </main>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Customers</h2>
+        <div class="pro-topbar-actions"><button class="pro-icon-btn">🔔</button></div>
+      </header>
+
+      <div class="pro-content">
+        <div class="pro-stat-grid">
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-blue">🧑‍🤝‍🧑</div>
+              <div><div class="pro-stat-title"><%= summary.total %></div><div class="pro-stat-sub">Total Customers</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-panel">
+          <h3>All Customers</h3>
+          <% if (!customers.length) { %>
+            <p style="color:#8A8FA3">No customers yet.</p>
+          <% } else { %>
+            <table class="pro-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead>
+              <tbody>
+                <% customers.forEach(c => { %>
+                  <tr>
+                    <td><%= c.name %></td>
+                    <td><%= c.email %></td>
+                    <td><%= c.phone || '—' %></td>
+                    <td><%= new Date(c.created_at).toLocaleDateString() %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

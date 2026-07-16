@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'Categories', styles: ['admin-layout', 'revenue-pro'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'categories' }) %>
+
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Categories</h2>
+        <div class="pro-topbar-actions">
+          <a href="/admin/categories/new" style="background:#D6478C;color:#fff;padding:.55rem 1.1rem;border-radius:8px;text-decoration:none;font-size:.9rem;font-weight:600">+ Add Category</a>
+        </div>
+      </header>
+
+      <div class="pro-content">
+        <div class="pro-stat-grid">
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-purple">🏷️</div>
+              <div><div class="pro-stat-title"><%= summary.total %></div><div class="pro-stat-sub">Total Categories</div></div>
+            </div>
+          </div>
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-blue">🛍️</div>
+              <div><div class="pro-stat-title"><%= summary.totalProducts %></div><div class="pro-stat-sub">Products Categorized</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-panel">
+          <h3>All Categories</h3>
+          <% if (!categories.length) { %>
+            <p style="color:#8A8FA3">No categories yet.</p>
+          <% } else { %>
+            <table class="pro-table">
+              <thead><tr><th>Category</th><th>Products</th><th>Actions</th></tr></thead>
+              <tbody>
+                <% categories.forEach(c => { %>
+                  <tr>
+                    <td>
+                      <div class="pro-product-cell">
+                        <img src="<%= c.image_url || '/images/placeholder.png' %>"/>
+                        <span><%= c.name %></span>
+                      </div>
+                    </td>
+                    <td><%= c.product_count %></td>
+                    <td>
+                      <a href="/admin/categories/<%= c.id %>/edit" style="color:#3E7FC4;font-weight:600;text-decoration:none;margin-right:.5rem">Edit</a>
+                      <form action="/admin/categories/<%= c.id %>/delete" method="post" style="display:inline">
+                        <button type="submit" style="background:none;border:none;color:#E0554F;cursor:pointer;font-weight:600;font-size:.9rem">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

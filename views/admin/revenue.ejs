@@ -1,102 +1,150 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Revenue</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Revenue', styles: ['admin-layout', 'revenue-pro'] }) %>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main">
-    <div class="page-header"><h1>Revenue</h1></div>
-    <p class="page-subtext">A full breakdown of sales, cost, and profit.</p>
+  <div class="admin-layout">
 
-    <div class="stat-grid" style="margin-bottom:2rem">
-      <div class="stat-card blue">
-        <div class="stat-card-icon">💵</div>
-        <div class="stat-card-value">$<%= summary.totalSales.toFixed(2) %></div>
-        <div class="stat-card-label">Total Sales</div>
-      </div>
-      <div class="stat-card orange">
-        <div class="stat-card-icon">📦</div>
-        <div class="stat-card-value">$<%= summary.totalCost.toFixed(2) %></div>
-        <div class="stat-card-label">Total Cost</div>
-      </div>
-      <div class="stat-card pink">
-        <div class="stat-card-icon">📈</div>
-        <div class="stat-card-value">$<%= summary.profit.toFixed(2) %></div>
-        <div class="stat-card-label">Net Profit</div>
-      </div>
-      <div class="stat-card muted" style="border-style:solid">
-        <div class="stat-card-icon">%</div>
-        <div class="stat-card-value" style="color:#241F1F"><%= summary.margin.toFixed(1) %>%</div>
-        <div class="stat-card-label" style="color:#7A6C68">Profit Margin</div>
+      <%- include('../partials/admin-sidebar', { active: 'orders' }) %>
+
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Revenue</h2>
+        <div class="pro-topbar-actions">
+          <button class="pro-icon-btn">🔔</button>
+          <button class="pro-icon-btn">⚙️</button>
+        </div>
+      </header>
+
+      <div class="pro-content">
+
+        <!-- Stat cards -->
+        <div class="pro-stat-grid">
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-blue">💵</div>
+              <div>
+                <div class="pro-stat-title">$<%= summary.totalSales.toFixed(2) %></div>
+                <div class="pro-stat-sub">Total Sales</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-orange">📦</div>
+              <div>
+                <div class="pro-stat-title">$<%= summary.totalCost.toFixed(2) %></div>
+                <div class="pro-stat-sub">Total Cost</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-green">📈</div>
+              <div>
+                <div class="pro-stat-title">$<%= summary.profit.toFixed(2) %></div>
+                <div class="pro-stat-sub">Net Profit</div>
+              </div>
+            </div>
+            <div class="pro-ring" style="background:conic-gradient(#1E9E5A <%= Math.min(summary.margin,100) %>%, #EAEAF0 0)">
+              <span class="pro-ring-value"><%= summary.margin.toFixed(0) %>%</span>
+            </div>
+          </div>
+
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-purple">%</div>
+              <div>
+                <div class="pro-stat-title"><%= summary.margin.toFixed(1) %>%</div>
+                <div class="pro-stat-sub">Profit Margin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trend chart -->
+        <div class="pro-panel">
+          <h3>Revenue Trend (Last 30 Days)</h3>
+          <div style="height:280px">
+            <canvas id="revenueTrendChart"></canvas>
+          </div>
+          <div class="pro-summary-strip">
+            <div class="pro-summary-item">
+              <div class="value">$<%= summary.totalSales.toFixed(2) %></div>
+              <div class="label">Total Sales <span class="up">↑</span></div>
+            </div>
+            <div class="pro-summary-item">
+              <div class="value">$<%= summary.profit.toFixed(2) %></div>
+              <div class="label">Net Profit <span class="up">↑</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-panel-row">
+          <!-- Revenue by status table -->
+          <div class="pro-panel">
+            <h3>Revenue by Order Status</h3>
+            <table class="pro-table">
+              <thead><tr><th>Status</th><th>Orders</th><th>Revenue</th></tr></thead>
+              <tbody>
+                <% byStatus.forEach(s => { %>
+                  <tr>
+                    <td><span class="pro-pill pill-<%= s.status === 'delivered' || s.status === 'completed' ? 'approved' : (s.status === 'cancelled' || s.status === 'rejected' ? 'rejected' : (s.status === 'pending' ? 'pending' : 'processing')) %>"><%= s.status %></span></td>
+                    <td><%= s.order_count %></td>
+                    <td>$<%= Number(s.revenue).toFixed(2) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Donut chart: revenue by payment method -->
+          <div class="pro-panel">
+            <h3>Payment Methods</h3>
+            <div class="pro-donut-wrap">
+              <div style="width:180px;height:180px">
+                <canvas id="paymentDonutChart"></canvas>
+              </div>
+              <div class="pro-legend" id="paymentLegend"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top products -->
+        <div class="pro-panel">
+          <h3>Top Revenue-Generating Products</h3>
+          <table class="pro-table">
+            <thead><tr><th>Product</th><th>Units Sold</th><th>Revenue</th></tr></thead>
+            <tbody>
+              <% topSelling.forEach(p => { %>
+                <tr>
+                  <td>
+                    <div class="pro-product-cell">
+                      <img src="<%= p.image_url || '/images/placeholder.png' %>"/>
+                      <span><%= p.name %></span>
+                    </div>
+                  </td>
+                  <td><%= p.units_sold %></td>
+                  <td>$<%= Number(p.revenue).toFixed(2) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
-
-    <section class="dash-section" style="margin-bottom:1.5rem">
-      <h2>Revenue Trend (Last 30 Days)</h2>
-      <div style="height:280px">
-        <canvas id="revenueTrendChart"></canvas>
-      </div>
-    </section>
-
-    <div class="chart-grid" style="margin-bottom:1.5rem">
-      <section class="dash-section">
-        <h2>Revenue by Order Status</h2>
-        <table class="product-table">
-          <thead><tr><th>Status</th><th>Orders</th><th>Revenue</th></tr></thead>
-          <tbody>
-            <% byStatus.forEach(s => { %>
-              <tr>
-                <td><span class="status-badge status-<%= s.status %>"><%= s.status %></span></td>
-                <td><%= s.order_count %></td>
-                <td>$<%= Number(s.revenue).toFixed(2) %></td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="dash-section">
-        <h2>Revenue by Payment Method</h2>
-        <table class="product-table">
-          <thead><tr><th>Method</th><th>Orders</th><th>Revenue</th></tr></thead>
-          <tbody>
-            <% byPayment.forEach(p => { %>
-              <tr>
-                <td><%= p.payment_method %></td>
-                <td><%= p.order_count %></td>
-                <td>$<%= Number(p.revenue).toFixed(2) %></td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </section>
-    </div>
-
-    <section class="dash-section">
-      <h2>Top Revenue-Generating Products</h2>
-      <table class="product-table">
-        <thead><tr><th>Image</th><th>Product</th><th>Units Sold</th><th>Revenue</th></tr></thead>
-        <tbody>
-          <% topSelling.forEach(p => { %>
-            <tr>
-              <td><img src="<%= p.image_url || '/images/placeholder.png' %>" style="width:44px;height:44px;object-fit:cover;border-radius:6px"/></td>
-              <td><%= p.name %></td>
-              <td><%= p.units_sold %></td>
-              <td>$<%= Number(p.revenue).toFixed(2) %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </section>
-  </main>
+  </div>
 
   <script>
     const dailySales = <%- JSON.stringify(dailySales) %>;
+    const byPayment = <%- JSON.stringify(byPayment) %>;
+
     new Chart(document.getElementById('revenueTrendChart'), {
       type: 'line',
       data: {
@@ -104,19 +152,50 @@
         datasets: [{
           label: 'Revenue ($)',
           data: dailySales.map(d => Number(d.revenue)),
-          borderColor: '#D63384',
-          backgroundColor: 'rgba(214,51,132,0.12)',
+          borderColor: '#3E7FC4',
+          backgroundColor: 'rgba(62,127,196,0.08)',
           fill: true,
-          tension: 0.35,
-          pointRadius: 2
+          tension: 0.4,
+          pointRadius: 0,
+          borderWidth: 2.5
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } }
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#F0F0F5' } },
+          x: { grid: { display: false } }
+        }
       }
+    });
+
+    const donutColors = ['#7C5CD6', '#3E7FC4', '#E38F2E', '#1E9E5A', '#E0554F'];
+    new Chart(document.getElementById('paymentDonutChart'), {
+      type: 'doughnut',
+      data: {
+        labels: byPayment.map(p => p.payment_method),
+        datasets: [{
+          data: byPayment.map(p => Number(p.revenue)),
+          backgroundColor: donutColors,
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    const legendEl = document.getElementById('paymentLegend');
+    byPayment.forEach((p, i) => {
+      const item = document.createElement('div');
+      item.className = 'pro-legend-item';
+      item.innerHTML = `<span class="pro-legend-dot" style="background:${donutColors[i % donutColors.length]}"></span> ${p.payment_method}`;
+      legendEl.appendChild(item);
     });
   </script>
 </body>

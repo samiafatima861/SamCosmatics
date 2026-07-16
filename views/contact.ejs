@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('partials/head', { title: 'Contact', styles: ['products', 'home'] }) %>
+</head>
+<body>
+
+  <%- include('partials/site-header', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
+
+  <main class="container page-hero" style="max-width:560px;margin:3rem auto">
+    <h1>Contact Us</h1>
+
+    <div class="info-card">
+      <div class="contact-grid">
+
+        <% if (siteSettings?.contact_email) { %>
+          <div class="contact-icon email">✉️</div>
+          <div class="contact-detail">
+            <span class="contact-label">Email</span>
+            <a href="mailto:<%= siteSettings.contact_email %>" class="contact-value"><%= siteSettings.contact_email %></a>
+          </div>
+        <% } %>
+
+        <% if (siteSettings?.contact_phone) { %>
+          <div class="contact-icon phone">📞</div>
+          <div class="contact-detail">
+            <span class="contact-label">Phone</span>
+            <a href="tel:<%= siteSettings.contact_phone %>" class="contact-value"><%= siteSettings.contact_phone %></a>
+          </div>
+        <% } %>
+
+        <% if (siteSettings?.address) { %>
+          <div class="contact-icon address">📍</div>
+          <div class="contact-detail">
+            <span class="contact-label">Address</span>
+            <span class="contact-value" style="cursor:default"><%= siteSettings.address %></span>
+          </div>
+        <% } %>
+
+      </div>
+
+      <% if (!siteSettings?.contact_email && !siteSettings?.contact_phone && !siteSettings?.address) { %>
+        <p style="color:#888">Contact information coming soon.</p>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/site-footer') %>
+</body>
+</html>

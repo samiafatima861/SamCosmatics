@@ -1,104 +1,176 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Stock Inventory</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Stock Inventory', styles: ['admin-layout', 'revenue-pro'] }) %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main">
-    <div class="page-header">
-      <h1>Stock Inventory</h1>
-    </div>
-    <p class="page-subtext">Track stock levels across all products and variants.</p>
+  <div class="admin-layout">
 
-      <% if (!products.length) { %>
-  <div class="empty-state">No products yet.</div>
-<% } else { %>
+    <%- include('../partials/admin-sidebar', { active: 'inventory' }) %>
 
-    <div class="inventory-toolbar">
-      <input type="text" id="inventory-search" placeholder="Search product name..."/>
-      <button type="button" id="inventory-reset" class="btn-reset">Reset</button>
-    </div>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Stock Inventory</h2>
+        <div class="pro-topbar-actions">
+          <button class="pro-icon-btn">🔔</button>
+        </div>
+      </header>
 
+      <div class="pro-content">
 
-    <table class="product-table" id="inventory-table">
-      <thead>
-        <tr>
-          <th>Sr. No.</th>
-          <th>Product</th>
-          <th>Variant Type</th>
-          <th>Variants</th>
-          <th>Stock</th>
-          <th>Low Stock Alert</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% products.forEach((p, idx) => { %>
-          <tr class="inventory-row" data-name="<%= p.name.toLowerCase() %>">
-            <td><%= idx + 1 %></td>
-            <td>
-              <div class="cart-product-cell">
-                <img class="cart-thumb" src="<%= p.image_url || '/images/placeholder.png' %>"/>
-                <strong><%= p.name %></strong>
+        <% if (!products.length) { %>
+          <div class="empty-state">No products yet.</div>
+        <% } else { %>
+
+          <div class="pro-stat-grid">
+            <div class="pro-stat-card">
+              <div class="pro-stat-left">
+                <div class="pro-icon-badge badge-blue">🛍️</div>
+                <div>
+                  <div class="pro-stat-title"><%= summary.totalProducts %></div>
+                  <div class="pro-stat-sub">Total Products</div>
+                </div>
               </div>
-            </td>
-            <% if (p.variants.length === 0) { %>
-              <td>—</td>
-              <td>—</td>
-              <td>
-                <% if (p.stock_quantity <= 5) { %>
-                  <span class="stock-badge stock-low"><%= p.stock_quantity %></span>
-                <% } else { %>
-                  <span class="stock-badge stock-ok"><%= p.stock_quantity %></span>
-                <% } %>
-              </td>
-              <td>—</td>
-            <% } else if (p.variants.length === 1) { %>
-              <td>Single</td>
-              <td><%= p.variants[0].variant_name %></td>
-              <td>
-                <% if (p.variants[0].stock_quantity <= p.variants[0].low_stock_threshold) { %>
-                  <span class="stock-badge stock-low"><%= p.variants[0].stock_quantity %></span>
-                <% } else { %>
-                  <span class="stock-badge stock-ok"><%= p.variants[0].stock_quantity %></span>
-                <% } %>
-              </td>
-              <td><%= p.variants[0].low_stock_threshold %></td>
-            <% } else { %>
-              <td>Multiple</td>
-              <td>
-                <% p.variants.forEach(v => { %>
-                  <div><%= v.variant_name %></div>
-                <% }) %>
-              </td>
-              <td>
-                <% p.variants.forEach(v => { %>
-                  <div>
-                    <% if (v.stock_quantity <= v.low_stock_threshold) { %>
-                      <span class="stock-badge stock-low"><%= v.stock_quantity %></span>
-                    <% } else { %>
-                      <span class="stock-badge stock-ok"><%= v.stock_quantity %></span>
-                    <% } %>
-                  </div>
-                <% }) %>
-              </td>
-              <td>
-                <% p.variants.forEach(v => { %>
-                  <div><%= v.low_stock_threshold %></div>
-                <% }) %>
-              </td>
-            <% } %>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-    <% } %>
-  </main>
+            </div>
+
+            <div class="pro-stat-card">
+              <div class="pro-stat-left">
+                <div class="pro-icon-badge badge-green">✅</div>
+                <div>
+                  <div class="pro-stat-title"><%= summary.healthy %></div>
+                  <div class="pro-stat-sub">Healthy Stock</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pro-stat-card">
+              <div class="pro-stat-left">
+                <div class="pro-icon-badge badge-orange">⚠️</div>
+                <div>
+                  <div class="pro-stat-title"><%= summary.low %></div>
+                  <div class="pro-stat-sub">Low Stock</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pro-stat-card">
+              <div class="pro-stat-left">
+                <div class="pro-icon-badge badge-red">⛔</div>
+                <div>
+                  <div class="pro-stat-title"><%= summary.outOfStock %></div>
+                  <div class="pro-stat-sub">Out of Stock</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pro-panel-row">
+            <div class="pro-panel">
+              <h3>Inventory</h3>
+
+              <div style="display:flex;gap:.75rem;margin-bottom:1.1rem">
+                <input type="text" id="inventory-search" placeholder="Search product name..." style="flex:1;max-width:280px;padding:.55rem .8rem;border:1px solid #E4E4EC;border-radius:8px;font-size:.9rem"/>
+                <button type="button" id="inventory-reset" style="background:#F4F5F9;border:none;color:#5A5F72;padding:.55rem 1rem;border-radius:8px;cursor:pointer;font-size:.85rem">Reset</button>
+              </div>
+
+              <div style="max-height:420px;overflow-y:auto">
+                <table class="pro-table" id="inventory-table">
+                  <thead>
+                    <tr><th>Product</th><th>Variant</th><th>Stock</th><th>Status</th></tr>
+                  </thead>
+                  <tbody>
+                    <% products.forEach(p => { %>
+                      <% if (p.variants.length === 0) { %>
+                        <tr class="inventory-row" data-name="<%= p.name.toLowerCase() %>">
+                          <td>
+                            <div class="pro-product-cell">
+                              <img src="<%= p.image_url || '/images/placeholder.png' %>"/>
+                              <span><%= p.name %></span>
+                            </div>
+                          </td>
+                          <td>—</td>
+                          <td><%= p.stock_quantity %></td>
+                          <td>
+                            <% if (p.stock_quantity <= 0) { %>
+                              <span class="pro-pill pill-rejected">Out of stock</span>
+                            <% } else if (p.stock_quantity <= 5) { %>
+                              <span class="pro-pill pill-pending">Low stock</span>
+                            <% } else { %>
+                              <span class="pro-pill pill-approved">Healthy</span>
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% } else { %>
+                        <% p.variants.forEach((v, idx) => { %>
+                          <tr class="inventory-row" data-name="<%= p.name.toLowerCase() %>">
+                            <td>
+                              <% if (idx === 0) { %>
+                                <div class="pro-product-cell">
+                                  <img src="<%= p.image_url || '/images/placeholder.png' %>"/>
+                                  <span><%= p.name %></span>
+                                </div>
+                              <% } %>
+                            </td>
+                            <td><%= v.variant_name %></td>
+                            <td><%= v.stock_quantity %></td>
+                            <td>
+                              <% if (v.stock_quantity <= 0) { %>
+                                <span class="pro-pill pill-rejected">Out of stock</span>
+                              <% } else if (v.stock_quantity <= v.low_stock_threshold) { %>
+                                <span class="pro-pill pill-pending">Low stock</span>
+                              <% } else { %>
+                                <span class="pro-pill pill-approved">Healthy</span>
+                              <% } %>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      <% } %>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="pro-panel">
+              <h3>Stock Health</h3>
+              <div class="pro-donut-wrap">
+                <div style="width:180px;height:180px">
+                  <canvas id="stockHealthChart"></canvas>
+                </div>
+                <div class="pro-legend">
+                  <div class="pro-legend-item"><span class="pro-legend-dot" style="background:#1E9E5A"></span> Healthy (<%= summary.healthy %>)</div>
+                  <div class="pro-legend-item"><span class="pro-legend-dot" style="background:#E38F2E"></span> Low (<%= summary.low %>)</div>
+                  <div class="pro-legend-item"><span class="pro-legend-dot" style="background:#E0554F"></span> Out (<%= summary.outOfStock %>)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <% } %>
+      </div>
+    </div>
+  </div>
 
   <script>
+    new Chart(document.getElementById('stockHealthChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Healthy', 'Low', 'Out of Stock'],
+        datasets: [{
+          data: [<%= summary.healthy %>, <%= summary.low %>, <%= summary.outOfStock %>],
+          backgroundColor: ['#1E9E5A', '#E38F2E', '#E0554F'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: { legend: { display: false } }
+      }
+    });
+
     const searchInput = document.getElementById('inventory-search');
     const resetBtn = document.getElementById('inventory-reset');
     const rows = document.querySelectorAll('.inventory-row');

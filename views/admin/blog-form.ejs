@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: blog.id ? 'Edit Blog Post' : 'New Blog Post', styles: ['admin-layout', 'settings'] }) %>
+  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'blogs' }) %>
+    <div class="pro-page">
+      <header class="pro-topbar"><h2><%= blog.id ? 'Edit Post' : 'New Post' %></h2></header>
+      <div class="pro-content">
+        <div class="page-wrap">
+          <form method="post" action="<%= blog.id ? '/admin/blogs/' + blog.id + '/edit' : '/admin/blogs/new' %>" enctype="multipart/form-data" id="blog-form">
+            <div class="section-card">
+              <div class="field">
+                <label>Title</label>
+                <input name="title" value="<%= blog.title || '' %>" required/>
+              </div>
+              <div class="field">
+                <label>Excerpt</label>
+                <textarea name="excerpt" rows="2"><%= blog.excerpt || '' %></textarea>
+              </div>
+              
+              <div class="field">
+  <label>Cover image</label>
+  <div class="upload-row">
+    <% if (blog.cover_image_url) { %>
+      <img src="<%= blog.cover_image_url %>" class="upload-preview"/>
+    <% } else { %>
+      <div class="upload-preview"></div>
+    <% } %>
+    <div class="upload-info">
+      <div class="hint">Recommended: 800×450 px, JPG or PNG</div>
+      <label class="upload-btn">📁 Choose file<input type="file" name="cover_image" accept="image/*" style="display:none"/></label>
+    </div>
+  </div>
+  <input type="hidden" name="cover_image_url" value="<%= blog.cover_image_url || '' %>"/>
+</div>
+
+
+              <div class="field">
+                <label>Content</label>
+                <div id="quill-editor" style="background:#fff;min-height:280px;border-radius:0 0 8px 8px"><%- blog.content || '' %></div>
+                <input type="hidden" name="content" id="content-input"/>
+              </div>
+              <div class="field">
+                <label>Status</label>
+                <select name="status">
+                  <option value="draft" <%= blog.status === 'draft' ? 'selected' : '' %>>Draft</option>
+                  <option value="published" <%= blog.status === 'published' ? 'selected' : '' %>>Published</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-footer">
+              <a class="btn-cancel" href="/admin/blogs">Cancel</a>
+              <button type="submit" class="btn-save">Save Post</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.js"></script>
+  <script>
+    const quill = new Quill('#quill-editor', {
+      theme: 'snow',
+      placeholder: 'Write your post...'
+    });
+
+    document.getElementById('blog-form').addEventListener('submit', () => {
+      document.getElementById('content-input').value = quill.root.innerHTML;
+    });
+  </script>
+</body>
+</html>

@@ -24,3 +24,54 @@ body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:#fafafa;co
 @media(max-width:600px){
   .card img{height:150px}
 }
+
+.category-filter{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:1.5rem;
+}
+.category-filter a{
+  padding:.5rem 1rem;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid #eee;
+  color:#333;
+  text-decoration:none;
+  font-size:.9rem;
+}
+.category-filter a.active{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1.75rem;
+}
+.card{
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+.card:hover{
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+.card-link-wrap,
+.card-title-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+html, body{
+  height:100%;
+}
+body{
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+main{
+  flex:1;
+}

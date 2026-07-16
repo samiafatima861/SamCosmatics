@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('partials/head', { title: 'About Us', styles: ['products', 'home'] }) %>
+</head>
+<body>
+
+  <%- include('partials/site-header', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
+
+  <main class="container page-hero" style="max-width:800px;margin:3rem auto">
+    <h1>About <%= siteSettings?.site_name || 'SamCosmetics' %></h1>
+    <div class="info-card">
+      <p style="white-space:pre-line"><%= siteSettings?.about_text || 'Welcome to our store! We are passionate about natural beauty and bold looks.' %></p>
+    </div>
+  </main>
+
+  <%- include('partials/site-footer') %>
+</body>
+</html>

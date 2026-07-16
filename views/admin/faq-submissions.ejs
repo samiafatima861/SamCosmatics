@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'FAQ Questions', styles: ['admin-layout', 'revenue-pro'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'faq-submissions' }) %>
+    <div class="pro-page">
+      <header class="pro-topbar"><h2>Submitted Questions</h2></header>
+      <div class="pro-content">
+        <div class="pro-panel">
+          <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+            <a href="/admin/faq-submissions" class="pro-pill">All</a>
+            <a href="/admin/faq-submissions?status=pending" class="pro-pill pill-pending">Pending</a>
+            <a href="/admin/faq-submissions?status=answered" class="pro-pill pill-approved">Answered</a>
+            <a href="/admin/faq-submissions?status=discarded" class="pro-pill pill-rejected">Discarded</a>
+          </div>
+
+          <% submissions.forEach(s => { %>
+            <div class="section-card" style="margin-bottom:1rem">
+              <div style="display:flex;justify-content:space-between;align-items:start">
+                <div>
+                  <p style="margin:0 0 .3rem;font-weight:600"><%= s.question %></p>
+                  <p style="margin:0;color:#8A8FA3;font-size:.85rem">
+                    <%= s.customer_name || 'Anonymous' %><% if (s.customer_email) { %> — <%= s.customer_email %><% } %>
+                    · <%= new Date(s.created_at).toLocaleDateString() %>
+                  </p>
+                </div>
+                <span class="pro-pill pill-<%= s.status === 'answered' ? 'approved' : (s.status === 'discarded' ? 'rejected' : 'pending') %>"><%= s.status %></span>
+              </div>
+
+              <% if (s.status === 'pending') { %>
+                <form method="post" action="/admin/faq-submissions/<%= s.id %>/publish" style="margin-top:1rem">
+                  <textarea name="answer" rows="3" placeholder="Write an answer to publish this as an FAQ..." required style="width:100%;padding:.6rem .8rem;border:1px solid #E4E4EC;border-radius:8px;box-sizing:border-box;margin-bottom:.75rem"></textarea>
+                  <button type="submit" style="background:#1E9E5A;color:#fff;border:none;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-weight:600;margin-right:.5rem">Answer & Publish</button>
+                  <button type="submit" formaction="/admin/faq-submissions/<%= s.id %>/discard" style="background:none;border:1px solid #E4E4EC;color:#5A5F72;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-weight:600">Discard</button>
+                </form>
+              <% } else { %>
+                <form action="/admin/faq-submissions/<%= s.id %>/delete" method="post" style="margin-top:.75rem">
+                  <button type="submit" style="background:none;border:none;color:#E0554F;cursor:pointer;font-weight:600;font-size:.85rem">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,71 +1,80 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Order #<%= order.id %></title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Order #' + order.id, styles: ['admin-layout', 'revenue-pro', 'admin'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main" style="max-width:800px">
-    <div class="page-header">
-      <h1>Order #<%= order.id %></h1>
-      <a href="/admin/orders" class="btn btn-secondary">Back to Orders</a>
-    </div>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'orders' }) %>
 
-    <section class="product-form-card" style="margin-bottom:1.5rem">
-      <h2 style="margin-top:0">Customer Details</h2>
-      <p><strong>Name:</strong> <%= order.customer_name %></p>
-      <p><strong>Email:</strong> <%= order.customer_email %></p>
-      <p><strong>Phone:</strong> <%= order.customer_phone || '—' %></p>
-      <p><strong>Shipping Address:</strong> <%= order.shipping_address %></p>
-      <p><strong>Billing Address:</strong> <%= order.billing_address %></p>
-      <p><strong>Payment Method:</strong> <%= order.payment_method %></p>
-      <p><strong>Payment Status:</strong> <%= order.payment_status %></p>
-      <p><strong>Order Date:</strong> <%= new Date(order.created_at).toLocaleString() %></p>
-    </section>
-
-    <section class="product-form-card" style="margin-bottom:1.5rem">
-      <h2 style="margin-top:0">Items</h2>
-      <table class="product-table">
-        <thead><tr><th>Image</th><th>Product</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
-        <tbody>
-          <% order.items.forEach(item => { %>
-            <tr>
-              <td><img src="<%= item.image_url || '/images/placeholder.png' %>" style="width:48px;height:48px;object-fit:cover;border-radius:6px"/></td>
-              <td><%= item.name %></td>
-              <td><%= item.qty %></td>
-              <td>$<%= Number(item.price).toFixed(2) %></td>
-              <td>$<%= (item.qty * item.price).toFixed(2) %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-      <p style="text-align:right;margin-top:1rem;font-size:1.1rem">
-        <strong>Total: $<%= Number(order.total).toFixed(2) %></strong>
-      </p>
-    </section>
-
-    <section class="product-form-card">
-      <h2 style="margin-top:0">Update Status</h2>
-      <p style="margin-bottom:1rem">
-        Current status: <span class="status-badge status-<%= order.status %>"><%= order.status %></span>
-      </p>
-      <form action="/admin/orders/<%= order.id %>/status" method="post" class="form-grid" style="max-width:300px">
-        <div class="form-field">
-          <label>Status</label>
-          <select name="status" style="width:100%;padding:.6rem;border:1px solid #E4D6D1;border-radius:6px">
-            <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
-            <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
-            <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
-            <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
-            <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
-          </select>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Order #<%= order.id %></h2>
+        <div class="pro-topbar-actions">
+          <a href="/admin/orders" style="background:#F4F5F9;color:#5A5F72;padding:.55rem 1.1rem;border-radius:8px;text-decoration:none;font-size:.9rem">← Back to Orders</a>
         </div>
-        <button type="submit" class="btn btn-pink">Update Status</button>
-      </form>
-    </section>
-  </main>
+      </header>
+
+      <div class="pro-content" style="max-width:800px">
+
+        <div class="pro-panel">
+          <h3>Customer Details</h3>
+          <p><strong>Name:</strong> <%= order.customer_name %></p>
+          <p><strong>Email:</strong> <%= order.customer_email %></p>
+          <p><strong>Phone:</strong> <%= order.customer_phone || '—' %></p>
+          <p><strong>Shipping Address:</strong> <%= order.shipping_address %></p>
+          <p><strong>Billing Address:</strong> <%= order.billing_address %></p>
+          <p><strong>Payment Method:</strong> <%= order.payment_method %></p>
+          <p><strong>Payment Status:</strong> <%= order.payment_status %></p>
+          <p><strong>Order Date:</strong> <%= new Date(order.created_at).toLocaleString() %></p>
+        </div>
+
+        <div class="pro-panel">
+          <h3>Items</h3>
+          <table class="pro-table">
+            <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              <% order.items.forEach(item => { %>
+                <tr>
+                  <td>
+                    <div class="pro-product-cell">
+                      <img src="<%= item.image_url || '/images/placeholder.png' %>"/>
+                      <span><%= item.name %></span>
+                    </div>
+                  </td>
+                  <td><%= item.qty %></td>
+                  <td>$<%= Number(item.price).toFixed(2) %></td>
+                  <td>$<%= (item.qty * item.price).toFixed(2) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <p style="text-align:right;margin-top:1rem;font-size:1.1rem">
+            <strong>Total: $<%= Number(order.total).toFixed(2) %></strong>
+          </p>
+        </div>
+
+        <div class="pro-panel">
+          <h3>Update Status</h3>
+          <p style="margin-bottom:1rem">
+            Current status: <span class="pro-pill pill-<%= order.status === 'delivered' || order.status === 'completed' ? 'approved' : (order.status === 'cancelled' ? 'rejected' : (order.status === 'pending' ? 'pending' : 'processing')) %>"><%= order.status %></span>
+          </p>
+          <form action="/admin/orders/<%= order.id %>/status" method="post" class="form-grid" style="max-width:300px">
+            <div class="form-field">
+              <label>Status</label>
+              <select name="status" style="width:100%;padding:.6rem;border:1px solid #E4D6D1;border-radius:6px">
+                <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
+                <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-pink">Update Status</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('partials/head', { title: 'Blog', styles: ['layout'] }) %>
+</head>
+<body>
+  <%- include('partials/site-header') %>
+  <main class="container page-hero" style="max-width:900px;margin:3rem auto">
+    <h1>Blog</h1>
+    <% if (!blogs.length) { %>
+      <p class="lede">No posts yet — check back soon.</p>
+    <% } else { %>
+      <div class="blog-grid">
+        <% blogs.forEach(b => { %>
+          <a href="/blog/<%= b.slug %>" class="blog-card">
+            <% if (b.cover_image_url) { %><img src="<%= b.cover_image_url %>" alt="<%= b.title %>"/><% } %>
+            <div class="blog-card-body">
+              <h3><%= b.title %></h3>
+              <p><%= b.excerpt %></p>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </main>
+  <%- include('partials/site-footer') %>
+</body>
+</html>

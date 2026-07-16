@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('partials/head', { title: product.name, styles: ['layout', 'products', 'product-detail'] }) %>
+</head>
+<body>
+
+  <%- include('partials/site-header') %>
+
+  <main class="container product-detail-page">
+    <div class="product-detail-grid">
+
+      <div class="pd-gallery">
+        <img id="pd-main-image" src="<%= allImages[0] %>" alt="<%= product.name %>"/>
+        <% if (allImages.length > 1) { %>
+          <div class="pd-thumbs">
+            <% allImages.forEach((img, i) => { %>
+              <img src="<%= img %>" class="pd-thumb <%= i === 0 ? 'active' : '' %>" data-full="<%= img %>"/>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="pd-info">
+        <% if (product.category_name) { %>
+          <div class="pd-category"><%= product.category_name %></div>
+        <% } %>
+        <h1><%= product.name %></h1>
+        <p class="pd-price">$<%= Number(product.price).toFixed(2) %></p>
+        <p class="pd-short"><%= product.short_description %></p>
+
+        <% if (variants.length) { %>
+          <div class="pd-variants">
+            <label>Available options:</label>
+            <div class="pd-variant-list">
+              <% variants.forEach(v => { %>
+                <span class="pd-variant-chip <%= v.stock_quantity <= 0 ? 'out-of-stock' : '' %>">
+                  <%= v.variant_name %>
+                  <% if (v.stock_quantity <= v.low_stock_threshold && v.stock_quantity > 0) { %>
+                    <small>(low stock)</small>
+                  <% } else if (v.stock_quantity <= 0) { %>
+                    <small>(out of stock)</small>
+                  <% } %>
+                </span>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+        <button class="btn add-bag" data-id="<%= product.id %>" style="margin-top:1.5rem">Add to Bag</button>
+
+        <div class="pd-description">
+          <h3>Description</h3>
+          <p><%= product.description || 'No description available.' %></p>
+        </div>
+
+      </div>
+
+    </div>
+     
+
+    <section class="reviews-section">
+  <h2>Customer Reviews</h2>
+
+  <div class="reviews-summary">
+    <span class="avg-rating"><%= Number(reviewSummary.avg_rating).toFixed(1) %> ★</span>
+    <span class="review-count">(<%= reviewSummary.total %> review<%= reviewSummary.total === 1 ? '' : 's' %>)</span>
+  </div>
+
+  <% if (reviewSubmitted) { %>
+    <div class="review-notice success">Thanks — your review is pending approval.</div>
+  <% } %>
+  <% if (reviewError === 'already_reviewed') { %>
+    <div class="review-notice error">You've already reviewed this product.</div>
+  <% } %>
+
+  <% if (reviews.length) { %>
+    <div class="review-list">
+      <% reviews.forEach(r => { %>
+        <div class="review-item">
+          <div class="review-head">
+            <strong><%= r.customer_name %></strong>
+            <span class="stars"><%= '★'.repeat(r.rating) %><%= '☆'.repeat(5 - r.rating) %></span>
+          </div>
+          <% if (r.comment) { %><p><%= r.comment %></p><% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="no-reviews">No reviews yet — be the first to review this product.</p>
+  <% } %>
+
+  <% if (typeof customer !== 'undefined' && customer && !alreadyReviewed) { %>
+    <form method="post" action="/products/<%= product.id %>/reviews" class="review-form">
+      <h3>Write a review</h3>
+      <label>Rating</label>
+      <select name="rating" required>
+        <option value="">Select rating</option>
+        <option value="5">5 — Excellent</option>
+        <option value="4">4 — Good</option>
+        <option value="3">3 — Average</option>
+        <option value="2">2 — Poor</option>
+        <option value="1">1 — Terrible</option>
+      </select>
+      <label>Comment (optional)</label>
+      <textarea name="comment" rows="3"></textarea>
+      <button type="submit" class="btn">Submit Review</button>
+    </form>
+  <% } else if (typeof customer === 'undefined' || !customer) { %>
+    <p class="no-reviews"><a href="/login">Log in</a> to write a review.</p>
+  <% } %>
+</section>
+
+  </main>
+
+  <%- include('partials/site-footer') %>
+
+  <script src="/js/product-actions.js"></script>
+  <script>
+    const mainImage = document.getElementById('pd-main-image');
+    document.querySelectorAll('.pd-thumb').forEach(thumb => {
+      thumb.addEventListener('mouseenter', () => {
+        mainImage.src = thumb.dataset.full;
+        document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

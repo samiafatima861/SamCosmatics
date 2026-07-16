@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: faq.id ? 'Edit FAQ' : 'New FAQ', styles: ['admin-layout', 'settings'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'faqs' }) %>
+    <div class="pro-page">
+      <header class="pro-topbar"><h2><%= faq.id ? 'Edit FAQ' : 'New FAQ' %></h2></header>
+      <div class="pro-content">
+        <div class="page-wrap">
+          <form method="post" action="<%= faq.id ? '/admin/faqs/' + faq.id + '/edit' : '/admin/faqs/new' %>">
+            <div class="section-card">
+              <div class="field">
+                <label>Question</label>
+                <input name="question" value="<%= faq.question || '' %>" required/>
+              </div>
+              <div class="field">
+                <label>Answer</label>
+                <textarea name="answer" rows="5" required><%= faq.answer || '' %></textarea>
+              </div>
+              <div class="field">
+                <label>Sort order</label>
+                <input name="sort_order" type="number" value="<%= faq.sort_order || 0 %>"/>
+              </div>
+            </div>
+            <div class="form-footer">
+              <a class="btn-cancel" href="/admin/faqs">Cancel</a>
+              <button type="submit" class="btn-save">Save FAQ</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

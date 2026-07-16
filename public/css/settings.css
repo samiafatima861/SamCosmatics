@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --ink: #22201F;
+  --stone: #8C8579;
+  --hairline: #EAE4DA;
+  --paper: #FDFCFA;
+  --ivory: #F7F5F1;
+  --gold: #A9762F;
+  --gold-dark: #8C6023;
+  --gold-tint: #FBF3E7;
+}
+
+/* ---- Page shell ---- */
+.page-wrap {
+  background: var(--ivory);
+}
+
+.settings-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 3rem;
+  align-items: start;
+}
+
+.page-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 0.3rem;
+}
+
+.page-sub {
+  font-family: 'Inter', sans-serif;
+  color: var(--stone);
+  font-size: 0.95rem;
+  margin: 0 0 2.5rem;
+}
+
+/* ---- Sticky section rail ---- */
+.settings-rail {
+  position: sticky;
+  top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  border-left: 1px solid var(--hairline);
+  padding-left: 1.1rem;
+}
+
+.settings-rail a {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--stone);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.settings-rail a.active {
+  color: var(--gold-dark);
+  position: relative;
+}
+
+.settings-rail a.active::before {
+  content: '';
+  position: absolute;
+  left: -1.16rem;
+  top: 0.15rem;
+  width: 2px;
+  height: 1rem;
+  background: var(--gold);
+}
+
+/* ---- Section cards ---- */
+.section-card {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 2.1rem 2.3rem;
+  margin-bottom: 1.75rem;
+  scroll-margin-top: 2rem;
+}
+
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.6rem;
+  border-bottom: 2px solid var(--gold);
+  display: inline-block;
+}
+
+/* ---- Fields ---- */
+.field {
+  margin-bottom: 1.4rem;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.45rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: var(--paper);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-tint);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 84px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+}
+
+/* ---- Upload rows ---- */
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.upload-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 3px;
+  object-fit: cover;
+  border: 1px solid var(--hairline);
+  background: var(--ivory);
+  flex-shrink: 0;
+}
+
+.upload-info {
+  flex: 1;
+}
+
+.hint {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: var(--stone);
+  margin-bottom: 0.55rem;
+}
+
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.upload-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---- Social fields ---- */
+.social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.social-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.social-field span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--gold-tint);
+  color: var(--gold-dark);
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.social-field input {
+  border: none;
+  background: transparent;
+  padding: 0.7rem 0.8rem;
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+
+.social-field input:focus {
+  outline: none;
+}
+
+/* ---- Footer ---- */
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.btn-cancel {
+  padding: 0.7rem 1.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--hairline);
+  color: var(--stone);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-cancel:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.btn-save {
+  padding: 0.7rem 1.7rem;
+  border-radius: 3px;
+  border: none;
+  background: var(--gold);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-save:hover {
+  background: var(--gold-dark);
+}
+
+.success-banner {
+  display: none;
+  background: var(--gold-tint);
+  color: var(--gold-dark);
+  border-left: 3px solid var(--gold);
+  padding: 0.9rem 1.2rem;
+  border-radius: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 760px) {
+  .settings-shell {
+    grid-template-columns: 1fr;
+  }
+  .settings-rail {
+    display: none;
+  }
+  .two-col,
+  .social-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,6 +8,7 @@ const Seller = require('../models/seller');
 const Customer = require('../models/customer');
 const Notification = require('../models/notification');
 
+
 // exports.dashboard = (req,res) => {
 //   res.render('admin/dashboard', { title:'Admin Dashboard', admin: req.session.admin });
 // };
@@ -29,6 +30,22 @@ exports.dashboard = async (req, res) => {
     Notification.getUnreadCount()
   ]);
 
+  let healthy = 0, low = 0, outOfStock = 0;
+  inventory.forEach(p => {
+    if (p.variants.length === 0) {
+      if (p.stock_quantity <= 0) outOfStock++;
+      else if (p.stock_quantity <= 5) low++;
+      else healthy++;
+    } else {
+      p.variants.forEach(v => {
+        if (v.stock_quantity <= 0) outOfStock++;
+        else if (v.stock_quantity <= v.low_stock_threshold) low++;
+        else healthy++;
+      });
+    }
+  });
+  const stockSummary = { healthy, low, outOfStock, totalProducts: inventory.length };
+
   res.render('admin/dashboard', {
     title: 'Admin Dashboard',
     admin: req.session.admin,
@@ -43,6 +60,7 @@ exports.dashboard = async (req, res) => {
     },
     lowStock,
     inventory,
+    stockSummary,
     topSelling,
     topSellers,
     dailySales,

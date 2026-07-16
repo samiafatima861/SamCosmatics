@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: category.id ? 'Edit Category' : 'Add Category', styles: ['admin-layout', 'admin'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'categories' }) %>
+
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2><%= category.id ? 'Edit Category' : 'Add Category' %></h2>
+      </header>
+
+      <div class="pro-content" style="max-width:600px">
+        <form method="post" enctype="multipart/form-data"
+              action="<%= category.id ? '/admin/categories/' + category.id + '/edit' : '/admin/categories/new' %>"
+              class="form-grid product-form-card">
+
+          <div class="form-field">
+            <label>Name</label>
+            <input name="name" required value="<%= category.name || '' %>"/>
+          </div>
+
+          <div class="form-field">
+            <label>Image (optional)</label>
+            <% if (category.image_url) { %>
+              <img src="<%= category.image_url %>" class="admin-avatar-square"/>
+            <% } %>
+            <input type="file" name="image" accept="image/*"/>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-pink">Save</button>
+            <a href="/admin/categories" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'Reviews', styles: ['admin-layout', 'revenue-pro'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'reviews' }) %>
+
+    <div class="pro-page">
+      <header class="pro-topbar"><h2>Reviews</h2></header>
+
+      <div class="pro-content">
+        <div class="pro-panel">
+          <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+            <a href="/admin/reviews" class="pro-pill <%= !currentFilter ? 'pill-approved' : '' %>">All</a>
+            <a href="/admin/reviews?status=pending" class="pro-pill pill-pending">Pending</a>
+            <a href="/admin/reviews?status=approved" class="pro-pill pill-approved">Approved</a>
+            <a href="/admin/reviews?status=rejected" class="pro-pill pill-rejected">Rejected</a>
+          </div>
+
+          <table class="pro-table">
+            <thead><tr><th>Product</th><th>Customer</th><th>Rating</th><th>Comment</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <% reviews.forEach(r => { %>
+                <tr>
+                  <td><%= r.product_name %></td>
+                  <td><%= r.customer_name %></td>
+                  <td><%= '★'.repeat(r.rating) %></td>
+                  <td><%= r.comment || '—' %></td>
+                  <td>
+                    <span class="pro-pill pill-<%= r.status === 'approved' ? 'approved' : (r.status === 'rejected' ? 'rejected' : 'pending') %>"><%= r.status %></span>
+                  </td>
+                  <td>
+                    <% if (r.status !== 'approved') { %>
+                      <form action="/admin/reviews/<%= r.id %>/approve" method="post" style="display:inline">
+                        <button type="submit" style="background:none;border:none;color:#1E9E5A;cursor:pointer;font-weight:600">Approve</button>
+                      </form>
+                    <% } %>
+                    <% if (r.status !== 'rejected') { %>
+                      <form action="/admin/reviews/<%= r.id %>/reject" method="post" style="display:inline">
+                        <button type="submit" style="background:none;border:none;color:#E38F2E;cursor:pointer;font-weight:600">Reject</button>
+                      </form>
+                    <% } %>
+                    <form action="/admin/reviews/<%= r.id %>/delete" method="post" style="display:inline">
+                      <button type="submit" style="background:none;border:none;color:#E0554F;cursor:pointer;font-weight:600">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

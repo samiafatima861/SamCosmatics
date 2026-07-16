@@ -1,34 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Shop - SamCosmetics</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/css/products.css" />
+  <%- include('partials/head', { title: 'Shop', styles: ['layout', 'products'] }) %>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <a class="logo" href="/">SamCosmetics</a>
-      <nav>
-        <a href="/">Home</a>
-        <a href="wishlist">wishlist</a>
-        <a href="/contact">Contact</a>
-        <a id="cart-link" href="/cart">Cart (<span id="cart-count"><%= cartCount %></span>)</a>
-      </nav>
-    </div>
-  </header>
+
+  <%- include('partials/site-header', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
 
   <main class="container products-page">
     <h1>Shop</h1>
+
     <div id="product-grid" class="product-grid">
       <% if (Array.isArray(products) && products.length) { %>
         <% products.forEach(function(p){ %>
           <div class="card" data-id="<%= p.id %>">
             <button class="wish" data-id="<%= p.id %>" title="Add to wishlist" aria-label="wishlist">♡</button>
-            <img src="<%= p.image_url || '/images/placeholder.png' %>" alt="<%= p.name %>">
+            <a href="/products/<%= p.id %>" class="card-link-wrap">
+              <img src="<%= p.image_url || '/images/placeholder.png' %>" alt="<%= p.name %>">
+            </a>
             <div class="card-body">
-              <h3><%= p.name %></h3>
+              <a href="/products/<%= p.id %>" class="card-title-link">
+                <h3><%= p.name %></h3>
+              </a>
               <p class="short"><%= p.short_description || '' %></p>
               <div class="meta">
                 <span class="price">$<%= Number(p.price).toFixed(2) %></span>
@@ -43,11 +36,8 @@
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">&copy; <span id="year"></span> SamCosmetics</div>
-  </footer>
+  <%- include('partials/site-footer') %>
 
   <script src="/js/product-actions.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

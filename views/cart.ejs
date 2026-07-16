@@ -1,59 +1,66 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title><%= title %></title>
-<link rel="stylesheet" href="/css/products.css">
-<link rel="stylesheet" href="/css/cart.css">
-</head><body>
-<header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-<main class="container">
-  <h1>Your Cart</h1>
-  <% if (!products || products.length === 0) { %>
-    <p class="cart-empty">Your cart is empty.</p>
-  <% } else { %>
-    <table class="cart-table">
-      <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr></thead>
-      <tbody>
-        <% let total = 0; products.forEach(p => { const subtotal = p.qty * Number(p.price); total += subtotal; %>
-        <tr data-id="<%= p.id %>">
-          <td>
-            <div class="cart-product-cell">
-              <img class="cart-thumb" src="<%= p.image_url || '/images/placeholder.png' %>"/>
-              <div><strong><%= p.name %></strong><div><%= p.short_description %></div></div>
-            </div>
-          </td>
-          <td>$<%= Number(p.price).toFixed(2) %></td>
-          <td><input class="qty cart-qty-input" type="number" min="0" value="<%= p.qty %>"/></td>
-          <td class="subtotal">$<%= subtotal.toFixed(2) %></td>
-          <td><button class="remove btn-remove">Remove</button></td>
-        </tr>
-        <% }) %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5" class="cart-checkout-row">
-            <strong style="margin-right:1rem">Total: $<%= total.toFixed(2) %></strong>
-            <form action="/checkout" method="get" style="display:inline">
-              <button type="submit" id="checkout" class="btn-checkout">Checkout</button>
-            </form>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  <% } %>
-</main>
-<script src="/js/product-actions.js"></script>
-<script>
-document.addEventListener('click', e=>{
-  if (e.target.matches('.remove')) {
-    const row = e.target.closest('tr'); const id = row.dataset.id;
-    fetch('/api/products/'+id+'/cart/remove',{method:'POST'}).then(()=>location.reload());
-  }
-});
-document.querySelectorAll('.qty').forEach(input=>{
-  input.addEventListener('change', ()=> {
-    const row = input.closest('tr'); const id = row.dataset.id;
-    fetch('/api/products/'+id+'/cart/update',{method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({qty: input.value})})
-    .then(()=>location.reload());
+<html>
+<head>
+  <%- include('partials/head', { title: 'Your Cart', styles: ['layout', 'products', 'cart'] }) %>
+</head>
+<body>
+
+  <%- include('partials/site-header', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
+
+  <main class="container">
+    <h1>Your Cart</h1>
+    <% if (!products || products.length === 0) { %>
+      <p class="cart-empty">Your cart is empty.</p>
+    <% } else { %>
+      <table class="cart-table">
+        <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr></thead>
+        <tbody>
+          <% let total = 0; products.forEach(p => { const subtotal = p.qty * Number(p.price); total += subtotal; %>
+          <tr data-id="<%= p.id %>">
+            <td>
+              <div class="cart-product-cell">
+                <img class="cart-thumb" src="<%= p.image_url || '/images/placeholder.png' %>"/>
+                <div><strong><%= p.name %></strong><div><%= p.short_description %></div></div>
+              </div>
+            </td>
+            <td>$<%= Number(p.price).toFixed(2) %></td>
+            <td><input class="qty cart-qty-input" type="number" min="0" value="<%= p.qty %>"/></td>
+            <td class="subtotal">$<%= subtotal.toFixed(2) %></td>
+            <td><button class="remove btn-remove">Remove</button></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" class="cart-checkout-row">
+              <strong style="margin-right:1rem">Total: $<%= total.toFixed(2) %></strong>
+              <form action="/checkout" method="get" style="display:inline">
+                <button type="submit" id="checkout" class="btn-checkout">Checkout</button>
+              </form>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    <% } %>
+  </main>
+
+  <%- include('partials/site-footer') %>
+
+  <script src="/js/product-actions.js"></script>
+  <script>
+  document.addEventListener('click', e=>{
+    if (e.target.matches('.remove')) {
+      const row = e.target.closest('tr'); const id = row.dataset.id;
+      fetch('/api/products/'+id+'/cart/remove',{method:'POST'}).then(()=>location.reload());
+    }
   });
-});
-</script>
-</body></html>
+  document.querySelectorAll('.qty').forEach(input=>{
+    input.addEventListener('change', ()=> {
+      const row = input.closest('tr'); const id = row.dataset.id;
+      fetch('/api/products/'+id+'/cart/update',{method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify({qty: input.value})})
+      .then(()=>location.reload());
+    });
+  });
+  </script>
+</body>
+</html>

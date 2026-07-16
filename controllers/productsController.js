@@ -1,24 +1,45 @@
 // controllers/productsController.js
 const Product = require('../models/product');
+const Category = require('../models/category');
+const ProductImage = require('../models/productImage');
+const ProductVariant = require('../models/productVariant');
+const Review = require('../models/review');
 
 /* Page render handlers */
-exports.listProductsPage = async (req, res, next) => {
-  try {
-    const products = await Product.getAll(100);
-    res.render('products', { title: 'Shop', products });
-  } catch (err) {
-    next(err);
+
+exports.listProductsPage = async (req, res) => {
+  const categories = await Category.getAll();
+  const selectedCategory = req.query.category;
+
+  let products;
+  if (selectedCategory) {
+    products = await Product.getByCategory(selectedCategory, 200);
+  } else {
+    products = await Product.getAll(200);
   }
+
+  res.render('products', { title: 'Shop', products, categories, selectedCategory });
 };
-// exports.listProductsPage = async (req, res, next) => {
-//   const products = [{ id:1, name:'Test', price:9.99, short_description:'x', image_url:'/images/placeholder.png' }];
-//   res.render('products', { title: 'Shop', products });
-// };
+
+
 exports.viewProductPage = async (req, res, next) => {
   try {
     const product = await Product.getById(req.params.id);
     if (!product) return res.status(404).render('404', { title: 'Not Found' });
-    res.render('products', { title: product.name, product });
+
+    const gallery = await ProductImage.getByProductId(product.id);
+    const variants = await ProductVariant.getByProductId(product.id);
+
+    // build full image list: main image first, then gallery
+    const allImages = [product.image_url || '/images/placeholder.png', ...gallery.map(g => g.image_url)];
+
+    const reviews = await Review.getApprovedByProduct(product.id);
+    const reviewSummary = await Review.getSummaryByProduct(product.id);
+    const alreadyReviewed = req.session.customer
+      ? await Review.hasCustomerReviewed(product.id, req.session.customer.id)
+      : false;
+
+    res.render('product-detail', { title: product.name, product, allImages, variants, reviews, reviewSummary, alreadyReviewed, reviewSubmitted: req.query.reviewSubmitted, reviewError: req.query.reviewError });
   } catch (err) {
     next(err);
   }

@@ -8,6 +8,7 @@ const upload = multer({ dest: 'public/images/' });
 const auth = require('../controllers/adminAuthController');
 const ctrl = require('../controllers/adminController');
 const requireAdmin = require('../middleware/requireAdmin');
+const adminReviewCtrl = require('../controllers/adminReviewController');
 
 // router.get('/admin/signup', auth.showSignup);
 // router.post('/admin/signup', auth.signup);
@@ -33,5 +34,11 @@ router.get('/admin/profile', requireAdmin, ctrl.showProfile);
 router.get('/admin/profile/edit', requireAdmin, ctrl.showEditProfile);
 router.post('/admin/profile/edit', requireAdmin, upload.single('image'), ctrl.updateProfile);
 router.post('/admin/profile/password', requireAdmin, ctrl.changePassword);
+
+
+router.get('/admin/reviews', requireAdmin, adminReviewCtrl.list);
+router.post('/admin/reviews/:id/approve', requireAdmin, adminReviewCtrl.approve);
+router.post('/admin/reviews/:id/reject', requireAdmin, adminReviewCtrl.reject);
+router.post('/admin/reviews/:id/delete', requireAdmin, adminReviewCtrl.delete);
 
 module.exports = router;

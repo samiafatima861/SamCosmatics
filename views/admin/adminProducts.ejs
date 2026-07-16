@@ -1,41 +1,86 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Manage Products', styles: ['admin-layout', 'revenue-pro', 'admin'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container">
-    <div class="page-header">
-       <h1>Manage Products</h1>
-       <a href="/admin/adminProducts/new" class="btn-create">+ Create New Product</a>
-    </div>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'products' }) %>
 
-    <table class ="product-table">
-      <thead><tr><th>#</th><th>Image</th><th>Name</th><th>Price</th><th>Featured</th><th>Actions</th></tr></thead>
-      <tbody>
-        <% products.forEach(p => { %>
-          <tr>
-            <td><%= p.id %></td>
-            <td><img src="<%= p.image_url || '/images/placeholder.png' %>" style="width:64px;height:64px;object-fit:cover"/></td>
-            <td><%= p.name %></td>
-            <td>$<%= Number(p.price).toFixed(2) %></td>
-            <td><%= p.featured ? 'Yes' : 'No' %></td>
-            <td>
-              <a href="/admin/adminProducts/<%= p.id %>/edit">Edit</a>
-              <form action="/admin/adminProducts/<%= p.id %>/delete" method="post" style="display:inline">
-                <button type="submit">Delete</button>
-              </form>
-            </td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </main>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Manage Products</h2>
+        <div class="pro-topbar-actions">
+          <a href="/admin/adminProducts/new" style="background:#D6478C;color:#fff;padding:.55rem 1.1rem;border-radius:8px;text-decoration:none;font-size:.9rem;font-weight:600">+ Create New Product</a>
+        </div>
+      </header>
+
+      <div class="pro-content">
+        <% const featuredCount = products.filter(p => p.featured).length; %>
+        <% const lowStockCount = products.filter(p => p.stock_quantity <= 5).length; %>
+
+        <div class="pro-stat-grid">
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-blue">🛍️</div>
+              <div><div class="pro-stat-title"><%= products.length %></div><div class="pro-stat-sub">Total Products</div></div>
+            </div>
+          </div>
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-pink">⭐</div>
+              <div><div class="pro-stat-title"><%= featuredCount %></div><div class="pro-stat-sub">Featured</div></div>
+            </div>
+          </div>
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-orange">⚠️</div>
+              <div><div class="pro-stat-title"><%= lowStockCount %></div><div class="pro-stat-sub">Low Stock</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-panel">
+          <h3>All Products</h3>
+          <% if (!products.length) { %>
+            <p style="color:#8A8FA3">No products yet.</p>
+          <% } else { %>
+            <table class="pro-table">
+              <thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Featured</th><th>Actions</th></tr></thead>
+              <tbody>
+                <% products.forEach(p => { %>
+                  <tr>
+                    <td>
+                      <div class="pro-product-cell">
+                        <img src="<%= p.image_url || '/images/placeholder.png' %>"/>
+                        <span><%= p.name %></span>
+                      </div>
+                    </td>
+                    <td>$<%= Number(p.price).toFixed(2) %></td>
+                    <td>
+                      <% if (p.stock_quantity <= 0) { %>
+                        <span class="pro-pill pill-rejected"><%= p.stock_quantity %></span>
+                      <% } else if (p.stock_quantity <= 5) { %>
+                        <span class="pro-pill pill-pending"><%= p.stock_quantity %></span>
+                      <% } else { %>
+                        <span class="pro-pill pill-approved"><%= p.stock_quantity %></span>
+                      <% } %>
+                    </td>
+                    <td><%= p.featured ? 'Yes' : 'No' %></td>
+                    <td>
+                      <a href="/admin/adminProducts/<%= p.id %>/edit" style="color:#3E7FC4;font-weight:600;text-decoration:none;margin-right:.5rem">Edit</a>
+                      <form action="/admin/adminProducts/<%= p.id %>/delete" method="post" style="display:inline">
+                        <button type="submit" style="background:none;border:none;color:#E0554F;cursor:pointer;font-weight:600;font-size:.9rem">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
-
-

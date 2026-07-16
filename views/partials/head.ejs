@@ -1,9 +1,16 @@
+
+
+
 <meta charset="utf-8"/>
-<title><%= typeof title !== 'undefined' ? title + ' — SamCosmetics' : 'SamCosmetics' %></title>
+<title><%= (typeof title !== 'undefined' && title) ? title + ' — ' + (siteSettings?.site_name || 'SamCosmetics') : (siteSettings?.site_name || 'SamCosmetics') %></title>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<% if (siteSettings?.favicon_url) { %>
+  <link rel="icon" href="<%= siteSettings.favicon_url %>"/>
+<% } %>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/base.css"/>
-<% if (typeof pageCss !== 'undefined') { %>
-  <link rel="stylesheet" href="/css/<%= pageCss %>.css"/>
+<% if (typeof styles !== 'undefined' && Array.isArray(styles)) { %>
+  <% styles.forEach(function(s){ %>
+    <link rel="stylesheet" href="/css/<%= s %>.css"/>
+  <% }) %>
 <% } %>

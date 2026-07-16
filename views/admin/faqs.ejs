@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('../partials/head', { title: 'FAQs', styles: ['admin-layout', 'revenue-pro'] }) %>
+</head>
+<body>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'faqs' }) %>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>FAQs</h2>
+        <a href="/admin/faqs/new" class="btn-create">+ New FAQ</a>
+      </header>
+      <div class="pro-content">
+        <div class="pro-panel">
+          <table class="pro-table">
+            <thead><tr><th>Question</th><th>Order</th><th>Actions</th></tr></thead>
+            <tbody>
+              <% faqs.forEach(f => { %>
+                <tr>
+                  <td><%= f.question %></td>
+                  <td><%= f.sort_order %></td>
+                  <td>
+                    <a href="/admin/faqs/<%= f.id %>/edit" style="color:#3E7FC4;font-weight:600;text-decoration:none;margin-right:.5rem">Edit</a>
+                    <form action="/admin/faqs/<%= f.id %>/delete" method="post" style="display:inline">
+                      <button type="submit" style="background:none;border:none;color:#E0554F;cursor:pointer;font-weight:600">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

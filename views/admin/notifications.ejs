@@ -1,33 +1,37 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Notifications</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Notifications', styles: ['admin-layout', 'admin'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main">
-    <div class="page-header"><h1>Notifications</h1></div>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'notifications' }) %>
 
-    <% if (!notifications.length) { %>
-      <div class="empty-state">No notifications yet.</div>
-    <% } else { %>
-      <div class="notif-list">
-        <% notifications.forEach(n => { %>
-          <a href="<%= n.link || '#' %>" class="notif-item">
-            <div class="notif-icon notif-icon-<%= n.type %>">
-              <% if (n.type === 'order') { %>📦<% } else if (n.type === 'seller_signup') { %>🏪<% } else { %>🧑‍🤝‍🧑<% } %>
-            </div>
-            <div>
-              <div class="notif-message"><%= n.message %></div>
-              <div class="notif-time"><%= new Date(n.created_at).toLocaleString() %></div>
-            </div>
-          </a>
-        <% }) %>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Notifications</h2>
+      </header>
+
+      <div class="pro-content">
+        <% if (!notifications.length) { %>
+          <div class="empty-state">No notifications yet.</div>
+        <% } else { %>
+          <div class="notif-list">
+            <% notifications.forEach(n => { %>
+              <a href="<%= n.link || '#' %>" class="notif-item">
+                <div class="notif-icon notif-icon-<%= n.type %>">
+                  <% if (n.type === 'order') { %>📦<% } else if (n.type === 'seller_signup') { %>🏪<% } else { %>🧑‍🤝‍🧑<% } %>
+                </div>
+                <div>
+                  <div class="notif-message"><%= n.message %></div>
+                  <div class="notif-time"><%= new Date(n.created_at).toLocaleString() %></div>
+                </div>
+              </a>
+            <% }) %>
+          </div>
+        <% } %>
       </div>
-    <% } %>
-  </main>
+    </div>
+  </div>
 </body>
 </html>

@@ -1,0 +1,22 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <% if (siteSettings?.logo_url) { %>
+        <img src="<%= siteSettings.logo_url %>" alt="<%= siteSettings?.site_name %>" class="footer-logo"/>
+      <% } else { %>
+        <span class="footer-name"><%= siteSettings?.site_name || 'SamCosmetics' %></span>
+      <% } %>
+    </div>
+
+    <% if (siteSettings?.facebook_url || siteSettings?.instagram_url || siteSettings?.twitter_url || siteSettings?.tiktok_url) { %>
+      <div class="footer-social">
+        <% if (siteSettings.facebook_url) { %><a href="<%= siteSettings.facebook_url %>" target="_blank" rel="noopener">Facebook</a><% } %>
+        <% if (siteSettings.instagram_url) { %><a href="<%= siteSettings.instagram_url %>" target="_blank" rel="noopener">Instagram</a><% } %>
+        <% if (siteSettings.twitter_url) { %><a href="<%= siteSettings.twitter_url %>" target="_blank" rel="noopener">Twitter / X</a><% } %>
+        <% if (siteSettings.tiktok_url) { %><a href="<%= siteSettings.tiktok_url %>" target="_blank" rel="noopener">TikTok</a><% } %>
+      </div>
+    <% } %>
+
+    <p class="footer-copy"><%= siteSettings?.copyright_text || ('© ' + new Date().getFullYear() + ' ' + (siteSettings?.site_name || 'SamCosmetics') + '. All rights reserved.') %></p>
+  </div>
+</footer>

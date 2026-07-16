@@ -1,22 +1,11 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Checkout - SamCosmetics</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/checkout.css"/>
+  <%- include('partials/head', { title: 'Checkout', styles: ['layout', 'products', 'checkout'] }) %>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <a class="logo" href="/">SamCosmetics</a>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/products">Shop</a>
-        <a href="/cart">Cart</a>
-      </nav>
-    </div>
-  </header>
+
+  <%- include('partials/site-header') %>
 
   <main class="container checkout-wrap">
     <h1>Checkout</h1>
@@ -57,5 +46,8 @@
       </div>
     </form>
   </main>
+
+  <%- include('partials/site-footer') %>
+
 </body>
 </html>

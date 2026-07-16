@@ -3,7 +3,15 @@ const Order = require('../models/order');
 exports.list = async (req, res, next) => {
   try {
     const orders = await Order.getAll(200);
-    res.render('admin/orders', { title: 'Orders', orders });
+    const pending = orders.filter(o => o.status === 'pending').length;
+    const delivered = orders.filter(o => o.status === 'delivered').length;
+    const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total), 0);
+
+    res.render('admin/orders', {
+      title: 'Orders',
+      orders,
+      summary: { total: orders.length, pending, delivered, totalRevenue }
+    });
   } catch (err) {
     next(err);
   }

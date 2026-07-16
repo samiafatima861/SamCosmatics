@@ -1,13 +1,12 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Application Submitted</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/order.css"/>
+  <%- include('../partials/head', { title: 'Application Submitted', styles: ['products', 'home', 'order'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
+
+  <%- include('../partials/site-header', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
+
   <main class="container">
     <div class="order-confirm">
       <div class="check-icon">✓</div>
@@ -17,5 +16,7 @@
       <a href="/seller/login">Go to login</a>
     </div>
   </main>
+
+  <%- include('../partials/site-footer') %>
 </body>
 </html>

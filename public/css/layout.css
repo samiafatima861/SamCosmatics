@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #1F2430;
+  --stone: #6B7080;
+  --paper: #ffffff;
+  --gold: #A9762F;
+  --hairline: #E7E4DC;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: var(--ink);
+  background: #FDFCFA;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ---- Header ---- */
+.site-header {
+  background: var(--ink);
+  padding: 1rem 0;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.site-header .logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.site-header .logo:not(:has(img)) {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.site-header nav {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.site-header nav a {
+  color: #E8E6E0;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.site-header nav a:hover {
+  color: var(--gold);
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  background: var(--ink);
+  margin-top: 4rem;
+  padding: 3rem 0 2rem;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+}
+
+.footer-logo {
+  height: 44px;
+  width: auto;
+}
+
+.footer-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-social a {
+  color: #C9C6BD;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+
+.footer-social a:hover {
+  color: var(--gold);
+}
+
+.footer-copy {
+  color: #8B8880;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* ---- Page content (About / Contact shared look) ---- */
+.page-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.page-hero .lede {
+  color: var(--stone);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.info-card {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.info-card p {
+  margin: 0 0 1rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+.info-card p:last-child { margin-bottom: 0; }
+
+.info-card strong {
+  color: var(--gold);
+  font-weight: 600;
+  margin-right: 0.35rem;
+}
+
+/* ---- Blog list ---- */
+.blog-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  gap:1.75rem;
+  margin-top:1.5rem;
+}
+.blog-card{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--paper);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.blog-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(31,36,48,0.08);
+}
+.blog-card img{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  display:block;
+}
+.blog-card-body{
+  padding:1.1rem 1.25rem 1.4rem;
+}
+.blog-card-body h3{
+  font-family:'Playfair Display', serif;
+  font-size:1.15rem;
+  margin:0 0 .5rem;
+  color:var(--ink);
+}
+.blog-card-body p{
+  color:var(--stone);
+  font-size:.9rem;
+  line-height:1.6;
+  margin:0;
+}
+
+/* ---- FAQ accordion ---- */
+.faq-list{
+  display:flex;
+  flex-direction:column;
+  gap:.75rem;
+  margin-top:1.5rem;
+}
+.faq-item{
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  background:var(--paper);
+  padding:.25rem 1.25rem;
+}
+.faq-item summary{
+  cursor:pointer;
+  padding:1rem 0;
+  font-weight:600;
+  color:var(--ink);
+  list-style:none;
+  position:relative;
+  padding-right:1.75rem;
+}
+.faq-item summary::-webkit-details-marker{
+  display:none;
+}
+.faq-item summary::after{
+  content:'+';
+  position:absolute;
+  right:0;
+  top:1rem;
+  color:var(--gold);
+  font-size:1.2rem;
+  font-weight:400;
+  transition:transform .2s ease;
+}
+.faq-item[open] summary::after{
+  content:'−';
+}
+.faq-item p{
+  color:var(--stone);
+  line-height:1.7;
+  margin:0 0 1.1rem;
+  font-size:.93rem;
+}
+
+.blog-content p{ margin:0 0 1.1rem; line-height:1.8; color:var(--ink); }
+.blog-content h2, .blog-content h3{ font-family:'Playfair Display', serif; margin:1.5rem 0 .75rem; }
+.blog-content img{ max-width:100%; border-radius:8px; margin:1rem 0; }
+.blog-content ul, .blog-content ol{ padding-left:1.5rem; margin:0 0 1.1rem; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body > main {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  flex-shrink: 0;
+}
+
+.faq-ask{ margin-top:3rem; border-top:1px solid var(--hairline); padding-top:2rem; }
+.faq-ask .review-form input{ width:100%; padding:.6rem .8rem; border:1px solid #ddd; border-radius:8px; margin-bottom:1rem; box-sizing:border-box; }
+
+.review-notice{
+  padding:.75rem 1rem;
+  border-radius:8px;
+  font-size:.9rem;
+  margin-bottom:1.25rem;
+}
+.review-notice.success{
+  background:#EAF7EE;
+  color:#1E9E5A;
+  border:1px solid #C9E9D3;
+}
+.review-notice.error{
+  background:#FDECEC;
+  color:#C0392B;
+  border:1px solid #F3C6C6;
+}
+
+.review-form{
+  max-width:480px;
+  border:1px solid #eee;
+  border-radius:12px;
+  padding:1.5rem;
+}
+.review-form h3{
+  margin:0 0 1rem;
+  font-size:1.05rem;
+}
+.review-form label{
+  display:block;
+  font-size:.85rem;
+  color:var(--muted);
+  margin:0 0 .4rem;
+}
+.review-form select,
+.review-form textarea{
+  width:100%;
+  padding:.6rem .8rem;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:.9rem;
+  font-family:inherit;
+  margin-bottom:1rem;
+  box-sizing:border-box;
+}
+.review-form select:focus,
+.review-form textarea:focus{
+  outline:none;
+  border-color:var(--accent);
+}
+.review-form textarea{
+  resize:vertical;
+  min-height:80px;
+}
+.review-form .btn{
+  border:none;
+  cursor:pointer;
+}

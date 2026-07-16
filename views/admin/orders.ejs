@@ -1,41 +1,73 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title>Orders</title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css" />
+  <%- include('../partials/head', { title: 'Orders', styles: ['admin-layout', 'revenue-pro'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main">
-    <div class="page-header">
-      <h1>Orders</h1>
-    </div>
-    <p class="page-subtext">All orders placed on SamCosmetics.</p>
+  <div class="admin-layout">
+    <%- include('../partials/admin-sidebar', { active: 'orders' }) %>
 
-    <% if (!orders.length) { %>
-      <div class="empty-state">No orders yet.</div>
-    <% } else { %>
-      <table class="product-table">
-        <thead>
-          <tr><th>#</th><th>Customer</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th></th></tr>
-        </thead>
-        <tbody>
-          <% orders.forEach(o => { %>
-            <tr>
-              <td><%= o.id %></td>
-              <td><%= o.customer_name %><br/><small><%= o.customer_email %></small></td>
-              <td>$<%= Number(o.total).toFixed(2) %></td>
-              <td><span class="status-badge status-<%= o.status %>"><%= o.status %></span></td>
-              <td><%= o.payment_method %></td>
-              <td><%= new Date(o.created_at).toLocaleDateString() %></td>
-              <td><a href="/admin/orders/<%= o.id %>">View</a></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    <% } %>
-  </main>
+    <div class="pro-page">
+      <header class="pro-topbar">
+        <h2>Orders</h2>
+        <div class="pro-topbar-actions">
+          <button class="pro-icon-btn">🔔</button>
+        </div>
+      </header>
+
+      <div class="pro-content">
+        <div class="pro-stat-grid">
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-blue">📦</div>
+              <div><div class="pro-stat-title"><%= summary.total %></div><div class="pro-stat-sub">Total Orders</div></div>
+            </div>
+          </div>
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-orange">⏳</div>
+              <div><div class="pro-stat-title"><%= summary.pending %></div><div class="pro-stat-sub">Pending</div></div>
+            </div>
+          </div>
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-green">✅</div>
+              <div><div class="pro-stat-title"><%= summary.delivered %></div><div class="pro-stat-sub">Delivered</div></div>
+            </div>
+          </div>
+          <div class="pro-stat-card">
+            <div class="pro-stat-left">
+              <div class="pro-icon-badge badge-pink">💰</div>
+              <div><div class="pro-stat-title">$<%= summary.totalRevenue.toFixed(2) %></div><div class="pro-stat-sub">Total Value</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-panel">
+          <h3>All Orders</h3>
+          <% if (!orders.length) { %>
+            <p style="color:#8A8FA3">No orders yet.</p>
+          <% } else { %>
+            <table class="pro-table">
+              <thead><tr><th>#</th><th>Customer</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th></th></tr></thead>
+              <tbody>
+                <% orders.forEach(o => { %>
+                  <tr>
+                    <td>#<%= o.id %></td>
+                    <td><%= o.customer_name %><br/><small style="color:#8A8FA3"><%= o.customer_email %></small></td>
+                    <td>$<%= Number(o.total).toFixed(2) %></td>
+                    <td><span class="pro-pill pill-<%= o.status === 'delivered' || o.status === 'completed' ? 'approved' : (o.status === 'cancelled' ? 'rejected' : (o.status === 'pending' ? 'pending' : 'processing')) %>"><%= o.status %></span></td>
+                    <td><%= o.payment_method %></td>
+                    <td><%= new Date(o.created_at).toLocaleDateString() %></td>
+                    <td><a href="/admin/orders/<%= o.id %>" style="color:#3E7FC4;font-weight:600;text-decoration:none">View →</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -1,84 +1,88 @@
 <!doctype html>
 <html>
 <head>
-  <%- include('../partials/head', { title: 'Edit Profile', pageCss: 'admin' }) %>
+  <%- include('../partials/head', { title: 'Edit Profile', styles: ['admin-layout', 'admin'] }) %>
 </head>
 <body>
-  <header class="site-header admin-header">
-    <div class="container admin-header-inner">
-      <a class="logo" href="/">SamCosmetics</a>
-      <div class="admin-nav">
-        <a href="/admin/profile" class="admin-profile-link">
-          <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="profile" class="admin-avatar-sm"/>
-          <span><%= admin?.name %></span>
-        </a>
-        <form action="/admin/logout" method="post" style="display:inline">
-          <button class="btn btn-dark btn-logout">Logout</button>
-        </form>
-      </div>
-    </div>
-  </header>
+  <div class="admin-layout">
 
-  <main class="container admin-main">
-    <h1>Profile</h1>
+    <%- include('../partials/admin-sidebar', { active: 'dashboard' }) %>
 
-    <% if (typeof error !== 'undefined') { %>
-      <div class="alert-error"><%= error %></div>
-    <% } %>
-    <% if (typeof success !== 'undefined') { %>
-      <div class="alert-success"><%= success %></div>
-    <% } %>
+    <div>
+      <header class="admin-topbar">
+        <h2>Edit Profile</h2>
+        <div class="admin-topbar-account">
+          <img src="<%= admin?.image_url || '/images/placeholder.png' %>" alt="admin" class="admin-topbar-avatar"/>
+          <span class="admin-topbar-name"><%= admin?.name %></span>
+          <form action="/admin/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>
+        </div>
+      </header>
 
-    <form action="/admin/profile/edit" method="post" enctype="multipart/form-data" class="form-grid">
-      <div class="form-field">
-        <label>Name</label>
-        <input name="name" value="<%= admin?.name || '' %>"/>
-      </div>
+      <main class="admin-content">
+        <h1>Profile</h1>
 
-      <div class="form-field">
-        <label>Email (readonly)</label>
-        <input name="email" value="<%= admin?.email || '' %>" readonly/>
-      </div>
-
-      <div class="form-field">
-        <label>Phone</label>
-        <input name="phone" value="<%= admin?.phone || '' %>"/>
-      </div>
-
-      <div class="form-field">
-        <label>Address</label>
-        <textarea name="address"><%= admin?.address || '' %></textarea>
-      </div>
-
-      <div class="form-field">
-        <label>Profile image</label>
-        <% if (admin?.image_url) { %>
-          <img src="<%= admin.image_url %>" alt="admin" class="admin-avatar-square"/>
+        <% if (typeof error !== 'undefined') { %>
+          <div class="alert-error"><%= error %></div>
         <% } %>
-        <input type="file" name="image" accept="image/*"/>
-      </div>
+        <% if (typeof success !== 'undefined') { %>
+          <div class="alert-success"><%= success %></div>
+        <% } %>
 
-      <div>
-        <button type="submit" class="btn btn-pink">Save profile</button>
-      </div>
-    </form>
+        <form action="/admin/profile/edit" method="post" enctype="multipart/form-data" class="form-grid">
+          <div class="form-field">
+            <label>Name</label>
+            <input name="name" value="<%= admin?.name || '' %>"/>
+          </div>
 
-    <hr style="margin:1.5rem 0"/>
+          <div class="form-field">
+            <label>Email (readonly)</label>
+            <input name="email" value="<%= admin?.email || '' %>" readonly/>
+          </div>
 
-    <h2>Change password</h2>
-    <form action="/admin/profile/password" method="post" class="form-grid form-grid--narrow">
-      <div class="form-field">
-        <label>Current password</label>
-        <input name="current" type="password" required/>
-      </div>
-      <div class="form-field">
-        <label>New password</label>
-        <input name="newPassword" type="password" required/>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-dark">Change password</button>
-      </div>
-    </form>
-  </main>
+          <div class="form-field">
+            <label>Phone</label>
+            <input name="phone" value="<%= admin?.phone || '' %>"/>
+          </div>
+
+          <div class="form-field">
+            <label>Address</label>
+            <textarea name="address"><%= admin?.address || '' %></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>Profile image</label>
+            <% if (admin?.image_url) { %>
+              <img src="<%= admin.image_url %>" alt="admin" class="admin-avatar-square"/>
+            <% } %>
+            <input type="file" name="image" accept="image/*"/>
+          </div>
+
+          <div>
+            <button type="submit" class="btn btn-pink">Save profile</button>
+          </div>
+        </form>
+
+        <hr style="margin:1.5rem 0"/>
+
+        <h2>Change password</h2>
+        <form action="/admin/profile/password" method="post" class="form-grid form-grid--narrow">
+          <div class="form-field">
+            <label>Current password</label>
+            <input name="current" type="password" required/>
+          </div>
+          <div class="form-field">
+            <label>New password</label>
+            <input name="newPassword" type="password" required/>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-dark">Change password</button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+  </div>
 </body>
 </html>

@@ -401,3 +401,12 @@
   font-size:.8rem;
   margin-top:.15rem;
 }
+/* Force consistent header behavior on seller/admin pages using products+home+admin stack */
+.site-header{
+  position:sticky !important;
+  top:0 !important;
+}
+html, body{
+  overflow-x:hidden;
+  overflow-y:auto !important;
+}

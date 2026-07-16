@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <%- include('partials/head', { title: 'FAQs', styles: ['layout'] }) %>
+</head>
+<body>
+  <%- include('partials/site-header') %>
+  <main class="container page-hero" style="max-width:760px;margin:3rem auto">
+    <h1>Frequently Asked Questions</h1>
+    <div class="faq-list">
+      <% faqs.forEach(f => { %>
+        <details class="faq-item">
+          <summary><%= f.question %></summary>
+          <p><%= f.answer %></p>
+        </details>
+      <% }) %>
+    </div>
+
+    <section class="faq-ask">
+      <h2>Didn't find your answer?</h2>
+      <p class="lede">Ask us a question and we'll get back to you, or add it to our FAQ list.</p>
+
+      <% if (submitted) { %>
+        <div class="review-notice success">Thanks — your question has been submitted.</div>
+      <% } %>
+
+      <form method="post" action="/faq/ask" class="review-form">
+        <label>Your question</label>
+        <textarea name="question" rows="3" required placeholder="Type your question here..."></textarea>
+
+        <% if (!customer) { %>
+          <label>Name (optional)</label>
+          <input name="name" placeholder="Your name"/>
+          <label>Email (optional)</label>
+          <input name="email" type="email" placeholder="you@example.com"/>
+        <% } %>
+
+        <button type="submit" class="btn">Submit Question</button>
+      </form>
+    </section>
+  </main>
+  <%- include('partials/site-footer') %>
+</body>
+</html>

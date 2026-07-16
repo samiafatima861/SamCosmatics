@@ -1,15 +1,13 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <title><%= product.id ? 'Edit Product' : 'Add Product' %></title>
-  <link rel="stylesheet" href="/css/products.css"/>
-  <link rel="stylesheet" href="/css/admin.css"/>
+  <%- include('../partials/head', { title: product.id ? 'Edit Product' : 'Add Product', styles: ['products', 'home', 'admin'] }) %>
 </head>
 <body>
-  <header class="site-header"><div class="container"><a class="logo" href="/">SamCosmetics</a></div></header>
-  <main class="container admin-main" style="max-width:700px">
 
+  <%- include('../partials/site-header', { cartCount: typeof cartCount !== 'undefined' ? cartCount : 0 }) %>
+
+  <main class="container admin-main" style="max-width:700px">
     <div class="page-header">
       <h1><%= product.id ? 'Edit Product' : 'Add Product' %></h1>
     </div>
@@ -57,5 +55,7 @@
       </div>
     </form>
   </main>
+
+  <%- include('../partials/site-footer') %>
 </body>
 </html>
